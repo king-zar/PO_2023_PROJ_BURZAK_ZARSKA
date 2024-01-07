@@ -10,6 +10,7 @@ public class Animal {
 
     private int energyLevel;
     private List<Integer> genes;
+    private int currentGeneIndex;
 
     // default
     public Animal () {
@@ -21,6 +22,7 @@ public class Animal {
         this.orientation = MapDirection.NORTH;
         this.energyLevel = energyLevel;
         this.genes = generateRandomGenes(genesNumber);
+        this.currentGeneIndex = 0;
     }
 
     private List<Integer> generateRandomGenes(int n) {
@@ -48,6 +50,32 @@ public class Animal {
         return orientation;
     }
 
+    public int getEnergyLevel() {
+        return this.energyLevel;
+    }
+
+    public Vector2d intendMove() {   // to jest z wzorca projektowego gdzie Animal to obserwator i zgłasza zamiar rucho a WorldMap zarządza tym ruchem możesz zmienić to jak Ci się nie podoba XD
+        int rotation = genes.get(currentGeneIndex);
+        this.rotate(rotation);
+        Vector2d movement = this.orientation.toUnitVector();
+        Vector2d newPosition = this.position.add(movement);
+
+        currentGeneIndex = (currentGeneIndex + 1) % genes.size();
+
+        return newPosition;
+    }
+
+    public void rotate(int rotation) {
+        for (int i = 0; i < rotation; i++) {
+            this.orientation = this.orientation.next();
+        }
+    }
+
+    public void setPosition(Vector2d newPosition) {
+        this.position = newPosition;
+    }
+
+
     void move() {
         // pamietamy na ktorym indeksie jest zwierze w danym ruchu czy jak?
     }
@@ -56,9 +84,34 @@ public class Animal {
         energyLevel += 2;
     }
 
-    void reproduce() {
-        if (energyLevel >= 8) {
-            // zeby mialo sens to mysle, ze energia minimum na poziomie 8
+    void reproduce(Animal partner) {
+        if (this.energyLevel > 8 && partner.getEnergyLevel() > 8) {
+            this.energyLevel -= 4;
+            partner.energyLevel -= 4;
+
+
+            int totalEnergyBeforeReproduction = this.getEnergyLevel() + partner.getEnergyLevel();
+            int thisGenesContribution = (this.getEnergyLevel() * genes.size()) / totalEnergyBeforeReproduction;
+            int partnerGenesContribution = genes.size() - thisGenesContribution;
+
+            Random random = new Random();
+            boolean takeFromThisLeft = random.nextBoolean();
+
+            List<Integer> childGenes = new ArrayList<>();
+            for (int i = 0; i < genes.size(); i++) {
+                if (i < thisGenesContribution && takeFromThisLeft || i >= thisGenesContribution && !takeFromThisLeft) {
+                    childGenes.add(this.genes.get(i));
+                } else {
+                    childGenes.add(partner.genes.get(i));
+                }
+            }
+
+            Animal child = new Animal(this.position, 8, genes.size()); // początkowa energia dziecka to 8 ?
+            child.genes = childGenes;
+
         }
     }
+
+
+
 }
