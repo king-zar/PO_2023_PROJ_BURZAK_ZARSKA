@@ -41,15 +41,26 @@ public enum MapDirection {
     }
 
     public Vector2d toUnitVector() {
-        return switch (this) {
-            case NORTH -> new Vector2d(0, 1);
-            case NORTHEAST -> new Vector2d(1, 1);
-            case EAST -> new Vector2d(1, 0);
-            case SOUTHEAST -> new Vector2d(1, -1);
-            case SOUTH -> new Vector2d(0, -1);
-            case SOUTHWEST -> new Vector2d(-1, -1);
-            case WEST -> new Vector2d(-1, 0);
-            case NORTHWEST -> new Vector2d(-1, 1);
-        };
+        System.out.println(this);
+        switch (this) {
+            case NORTH:
+                return new Vector2d(0, 1);
+            case NORTHEAST:
+                return new Vector2d(1, 1);
+            case EAST:
+                return new Vector2d(1, 0);
+            case SOUTHEAST:
+                return new Vector2d(1, -1);
+            case SOUTH:
+                return new Vector2d(0, -1);
+            case SOUTHWEST:
+                return new Vector2d(-1, -1);
+            case WEST:
+                return new Vector2d(-1, 0);
+            case NORTHWEST:
+                return new Vector2d(-1, 1);
+            default: // to bedzie trzeba sensownie obsluzyc
+                throw new IllegalStateException("Unexpected value: " + this);
+        }
     }
 }

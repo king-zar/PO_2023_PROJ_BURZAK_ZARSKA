@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Animal {
+public class Animal implements WorldElement {
     private Vector2d position;
     private MapDirection orientation;
 
@@ -13,19 +13,24 @@ public class Animal {
     private int currentGeneIndex;
 
     // default
-    public Animal () {
-        this(new Vector2d(2, 2), 10, 7);
+    public Animal (Vector2d position) {
+        this(position, 10, 7);
     }
 
     public Animal(Vector2d position, int energyLevel, int genesNumber) {
+        this(position, energyLevel, genesNumber, generateRandomGenes(genesNumber));
+    }
+
+    // dla zwierzat dzieci ponizszy konstruktor dziala zawsze
+    private Animal(Vector2d position, int energyLevel, int genesNumber, List<Integer> genes) {
         this.position = position;
         this.orientation = MapDirection.NORTH;
         this.energyLevel = energyLevel;
-        this.genes = generateRandomGenes(genesNumber);
+        this.genes = new ArrayList<>(genes); // kopia aby uniknąć wpływu zewnętrznych zmian
         this.currentGeneIndex = 0;
     }
 
-    private List<Integer> generateRandomGenes(int n) {
+    private static List<Integer> generateRandomGenes(int n) {
         List<Integer> randomGenes = new ArrayList<>();
         Random random = new Random();
 
@@ -34,7 +39,6 @@ public class Animal {
             randomGenes.add(random.nextInt(8));
         }
 
-        System.out.println(randomGenes);
         return randomGenes;
     }
 
@@ -52,6 +56,10 @@ public class Animal {
 
     public int getEnergyLevel() {
         return this.energyLevel;
+    }
+
+    public List<Integer> getGenes() {
+        return genes;
     }
 
     public Vector2d intendMove() {   // to jest z wzorca projektowego gdzie Animal to obserwator i zgłasza zamiar rucho a WorldMap zarządza tym ruchem możesz zmienić to jak Ci się nie podoba XD
@@ -76,42 +84,62 @@ public class Animal {
     }
 
 
-    void move() {
-        // pamietamy na ktorym indeksie jest zwierze w danym ruchu czy jak?
-    }
+    public void move(WorldMap map) {
+        Vector2d intendedPosition = intendMove();
 
-    void eat() { // 1 to troche malo jak na fakt, ze spotkanie rosliny nie jest az tak czeste
-        energyLevel += 2;
-    }
-
-    void reproduce(Animal partner) {
-        if (this.energyLevel > 8 && partner.getEnergyLevel() > 8) {
-            this.energyLevel -= 4;
-            partner.energyLevel -= 4;
-
-
-            int totalEnergyBeforeReproduction = this.getEnergyLevel() + partner.getEnergyLevel();
-            int thisGenesContribution = (this.getEnergyLevel() * genes.size()) / totalEnergyBeforeReproduction;
-            int partnerGenesContribution = genes.size() - thisGenesContribution;
-
-            Random random = new Random();
-            boolean takeFromThisLeft = random.nextBoolean();
-
-            List<Integer> childGenes = new ArrayList<>();
-            for (int i = 0; i < genes.size(); i++) {
-                if (i < thisGenesContribution && takeFromThisLeft || i >= thisGenesContribution && !takeFromThisLeft) {
-                    childGenes.add(this.genes.get(i));
-                } else {
-                    childGenes.add(partner.genes.get(i));
-                }
-            }
-
-            Animal child = new Animal(this.position, 8, genes.size()); // początkowa energia dziecka to 8 ?
-            child.genes = childGenes;
-
+        if (isValidMove(intendedPosition, map)) {
+            setPosition(intendedPosition);
         }
     }
 
+    private boolean isValidMove(Vector2d newPosition, WorldMap map) {
+        // czy w obszarze mapy
+        return newPosition.follows(new Vector2d(0, 0)) && newPosition.precedes(new Vector2d(map.getMapWidth(), map.getMapHeight()));
+    }
 
+    void eat(Grass grass) {
+        energyLevel += grass.getPlantNutrition();
+    }
+    public void reproduce(Animal partner) {
+        if (canReproduceWith(partner)) {
+            performReproductionWith(partner);
+        }
+    }
 
+    private boolean canReproduceWith(Animal partner) {
+        return this.position.equals(partner.getPosition()) &&
+                this.energyLevel >= 8 &&
+                partner.getEnergyLevel() >= 8;
+    }
+
+    private void performReproductionWith(Animal partner) {
+        this.energyLevel -= 5;
+        partner.energyLevel -= 5;
+
+        int totalEnergyBeforeReproduction = this.getEnergyLevel() + partner.getEnergyLevel();
+        int thisGenesContribution = (this.getEnergyLevel() * genes.size()) / totalEnergyBeforeReproduction;
+        int partnerGenesContribution = genes.size() - thisGenesContribution;
+
+        Random random = new Random();
+        boolean takeFromThisLeft = random.nextBoolean();
+
+        List<Integer> childGenes = new ArrayList<>();
+        for (int i = 0; i < genes.size(); i++) {
+            if ((i < thisGenesContribution && takeFromThisLeft) || (i >= thisGenesContribution && !takeFromThisLeft)) {
+                childGenes.add(this.genes.get(i));
+            } else {
+                childGenes.add(partner.genes.get(i));
+            }
+        }
+
+        // mozemy zmutowac losowo od 0 do 3 genow dziecka
+        int mutationCount = random.nextInt(4);
+        for (int i = 0; i < mutationCount; i++) {
+            int mutatedGeneIndex = random.nextInt(genes.size());
+            int newGeneValue = random.nextInt(8);
+            childGenes.set(mutatedGeneIndex, newGeneValue);
+        }
+
+        Animal child = new Animal(this.position, 8, genes.size(), childGenes);
+    }
 }

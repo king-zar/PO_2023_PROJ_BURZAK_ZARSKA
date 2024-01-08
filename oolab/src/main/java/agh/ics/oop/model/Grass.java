@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-public class Grass {
+public class Grass implements WorldElement {
     private final Vector2d position;
     private final int plantNutrition;
 

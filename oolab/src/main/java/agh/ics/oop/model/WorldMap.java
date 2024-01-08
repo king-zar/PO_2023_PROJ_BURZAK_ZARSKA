@@ -13,6 +13,11 @@ public class WorldMap {
     private final int mapWidth;
     private static Multimap<Vector2d, Object> map = HashMultimap.create();
 
+    // default
+    public WorldMap() {
+        this(10, 10);
+    }
+
     public WorldMap(int mapWidth, int mapHeight) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
@@ -26,18 +31,16 @@ public class WorldMap {
         map.remove(position, item);
     }
 
-    public Collection<Object> getItemsAt(Vector2d position) {
-        return map.get(position);
+    public int getMapHeight() {
+        return mapHeight;
     }
 
-    public Collection<Animal> getAnimalsAt(Vector2d position) {  // tu chodzi o to zeby odroznic "typ" obiektu ktory sie znajduje na position
-        Collection<Animal> animals = new ArrayList<>();
-        for (Object item : getItemsAt(position)) {
-            if (item instanceof Animal) {
-                animals.add((Animal) item);
-            }
-        }
-        return animals;
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    public Collection<Object> getItemsAt(Vector2d position) {
+        return map.get(position);
     }
 
     public void performMove(Animal animal) {
@@ -79,12 +82,39 @@ public class WorldMap {
                     .toList();
 
             Animal winner = sortedAnimals.get(0);
-            winner.eat();  // chyba bylo ze 1 moze zjesc tylko?
+
+            Grass grass = getGrassAt(position);
+
+            if (grass != null) {
+                winner.eat(grass);
+                // Usuwamy zjedzoną trawę z mapy
+                remove(position, grass);
+            }
 
             if (sortedAnimals.size() > 1) {
                 Animal second = sortedAnimals.get(1);
                 winner.reproduce(second);
             }
         }
+    }
+
+    public Collection<Animal> getAnimalsAt(Vector2d position) {  // tu chodzi o to zeby odroznic "typ" obiektu ktory sie znajduje na position
+        Collection<Animal> animals = new ArrayList<>();
+        for (Object item : getItemsAt(position)) {
+            if (item instanceof Animal) {
+                animals.add((Animal) item);
+            }
+        }
+        return animals;
+    }
+
+    private Grass getGrassAt(Vector2d position) { // w sumie nie wiem jak z tym bedzie bo domyslnie niby miala byc jedna roslina na danej pozycji
+        Collection<Object> items = getItemsAt(position);
+        for (Object item : items) {
+            if (item instanceof Grass) {
+                return (Grass) item;
+            }
+        }
+        return null;
     }
 }
