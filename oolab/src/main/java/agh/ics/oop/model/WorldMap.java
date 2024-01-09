@@ -190,9 +190,11 @@ public class WorldMap {
     }
 
     private void addGrass(Vector2d position) {
-        Random random = new Random();
-        int grassNutrition = random.nextInt(3) + 1; // Losowa liczba z zakresu 1-3
-        Grass grass = new Grass(position, grassNutrition);
-        WorldMap.add(position, grass);
+        if (getGrassAt(position) == null) { // na danej pozycji moze byc tylko jedna trawa
+            Random random = new Random();
+            int grassNutrition = random.nextInt(3) + 1; // Losowa liczba z zakresu 1-3
+            Grass grass = new Grass(position, grassNutrition);
+            WorldMap.add(position, grass);
+        }
     }
 }
