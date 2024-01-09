@@ -3,15 +3,18 @@ package agh.ics.oop.model;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class WorldMap {
     private final int mapHeight;
     private final int mapWidth;
+    private static int grassToGrowPerStep;
+
     private static Multimap<Vector2d, Object> map = HashMultimap.create();
+
+    private static final double PREFERRED_AREA_RATIO = 0.2;
+    private static final double GROWTH_RATIO_AT_PREFERRED_AREA = 0.8;
 
     // default
     public WorldMap() {
@@ -21,6 +24,7 @@ public class WorldMap {
     public WorldMap(int mapWidth, int mapHeight) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
+        this.grassToGrowPerStep = (int) Math.round(mapWidth * mapHeight * 0.1);
     }
 
     public static void add(Vector2d position, Object item) {
@@ -54,7 +58,7 @@ public class WorldMap {
         }
     }
 
-    private Vector2d wrapPosition(Vector2d position) {
+    private Vector2d wrapPosition(Vector2d position) { // kula ziemska
         int wrappedX = position.getX() % mapWidth;
         if (wrappedX < 0) {
             wrappedX += mapWidth;
@@ -98,23 +102,97 @@ public class WorldMap {
         }
     }
 
-    public Collection<Animal> getAnimalsAt(Vector2d position) {  // tu chodzi o to zeby odroznic "typ" obiektu ktory sie znajduje na position
-        Collection<Animal> animals = new ArrayList<>();
-        for (Object item : getItemsAt(position)) {
-            if (item instanceof Animal) {
-                animals.add((Animal) item);
-            }
-        }
-        return animals;
+    private Collection<Animal> getAnimalsAt(Vector2d position) {
+        return getItemsAt(position).stream()
+                .filter(item -> item instanceof Animal)
+                .map(item -> (Animal) item)
+                .toList();
     }
 
-    private Grass getGrassAt(Vector2d position) { // w sumie nie wiem jak z tym bedzie bo domyslnie niby miala byc jedna roslina na danej pozycji
-        Collection<Object> items = getItemsAt(position);
-        for (Object item : items) {
-            if (item instanceof Grass) {
-                return (Grass) item;
+    private Grass getGrassAt(Vector2d position) {
+        return getItemsAt(position).stream()
+                .filter(item -> item instanceof Grass)
+                .map(item -> (Grass) item)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void simulateTimeStep() {
+        deleteDeadAnimals();
+        moveAnimals();
+        handleAnimalReproductionAndEating();
+        growGrass();
+    }
+
+    private void deleteDeadAnimals() {
+        List<Animal> deadAnimals = new ArrayList<>();
+
+        for (Object item : map.values()) {
+            if (item instanceof Animal) {
+                Animal animal = (Animal) item;
+                if (animal.getEnergyLevel() <= 0) {
+                    deadAnimals.add(animal);
+                }
             }
         }
-        return null;
+
+        for (Animal deadAnimal : deadAnimals) {
+            remove(deadAnimal.getPosition(), deadAnimal);
+        }
+    }
+
+    private void moveAnimals() {
+        List<Animal> animals = getAllAnimals();
+        for (Animal animal : animals) {
+            performMove(animal);
+        }
+    }
+
+    private List<Animal> getAllAnimals() {
+        return map.values().stream()
+                .filter(item -> item instanceof Animal)
+                .map(item -> (Animal) item)
+                .toList();
+    }
+
+    public void handleAnimalReproductionAndEating() {
+        List<Animal> animals = getAllAnimals();
+
+        for (Animal animal : animals) {
+            resolveConflictAtPosition(animal.getPosition()); // po przesunieciu juz
+        }
+    }
+
+    private void growGrass() {
+        Random random = new Random();
+
+        // rownik z dzungla
+        int preferredAreaHeight = (int) (mapHeight * PREFERRED_AREA_RATIO);
+        int preferredAreaYStart = (mapHeight - preferredAreaHeight) / 2;
+        int preferredAreaYEnd = preferredAreaYStart + preferredAreaHeight;
+
+        for (int i=0; i<grassToGrowPerStep; i++) {
+            double probability = random.nextDouble();
+            int x = random.nextInt(mapWidth);
+            int y;
+
+            if (probability <= GROWTH_RATIO_AT_PREFERRED_AREA) {
+                y = random.nextInt(preferredAreaHeight) + preferredAreaYStart; // aby bylo w preferowanym miejscu
+
+            } else {
+                do {
+                    y = random.nextInt(mapHeight);
+                } while (y >= preferredAreaYStart && y < preferredAreaYEnd);
+            }
+
+            addGrass(new Vector2d(x, y));
+        }
+    }
+
+    private void addGrass(Vector2d position) {
+        Random random = new Random();
+        int grassNutrition = random.nextInt(3) + 1; // Losowa liczba z zakresu 1-3
+        Grass grass = new Grass(position, grassNutrition);
+        WorldMap.add(position, grass);
     }
 }

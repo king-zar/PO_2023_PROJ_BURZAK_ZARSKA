@@ -83,20 +83,6 @@ public class Animal implements WorldElement {
         this.position = newPosition;
     }
 
-
-    public void move(WorldMap map) {
-        Vector2d intendedPosition = intendMove();
-
-        if (isValidMove(intendedPosition, map)) {
-            setPosition(intendedPosition);
-        }
-    }
-
-    private boolean isValidMove(Vector2d newPosition, WorldMap map) {
-        // czy w obszarze mapy
-        return newPosition.follows(new Vector2d(0, 0)) && newPosition.precedes(new Vector2d(map.getMapWidth(), map.getMapHeight()));
-    }
-
     void eat(Grass grass) {
         energyLevel += grass.getPlantNutrition();
     }
@@ -106,7 +92,7 @@ public class Animal implements WorldElement {
         }
     }
 
-    private boolean canReproduceWith(Animal partner) {
+    boolean canReproduceWith(Animal partner) {
         return this.position.equals(partner.getPosition()) &&
                 this.energyLevel >= 8 &&
                 partner.getEnergyLevel() >= 8;
