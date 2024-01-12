@@ -11,7 +11,8 @@ public class WorldMap {
     private final int mapWidth;
     private static int grassToGrowPerStep;
 
-    private static Multimap<Vector2d, Object> map = HashMultimap.create();
+    private static Multimap<Vector2d, Object> map = HashMultimap.create(); // WorldElement zamiast Object
+    // albo same zwierzeta i rosliny w innej mapie
 
     private static final double PREFERRED_AREA_RATIO = 0.2;
     private static final double GROWTH_RATIO_AT_PREFERRED_AREA = 0.8;
@@ -74,6 +75,7 @@ public class WorldMap {
         remove(oldPosition, animal);
         add(newPosition, animal);
         animal.setPosition(newPosition);
+        animal.loseEnergyAfterMove();
     }
 
     private void resolveConflictAtPosition(Vector2d position) {
@@ -117,6 +119,7 @@ public class WorldMap {
                 .orElse(null);
     }
 
+    // wydzielic do nowej klasy
     public void simulateTimeStep() {
         deleteDeadAnimals();
         moveAnimals();
@@ -159,7 +162,9 @@ public class WorldMap {
         List<Animal> animals = getAllAnimals();
 
         for (Animal animal : animals) {
-            resolveConflictAtPosition(animal.getPosition()); // po przesunieciu juz
+            if (animal.getEnergyLevel() > 0) {
+                resolveConflictAtPosition(animal.getPosition()); // po przesunieciu juz
+            }
         }
     }
 

@@ -83,13 +83,17 @@ public class Animal implements WorldElement {
         this.position = newPosition;
     }
 
-    void eat(Grass grass) {
+    public void eat(Grass grass) {
         energyLevel += grass.getPlantNutrition();
     }
     public void reproduce(Animal partner) {
         if (canReproduceWith(partner)) {
             performReproductionWith(partner);
         }
+    }
+
+    public void loseEnergyAfterMove() {
+        energyLevel -= 1;
     }
 
     boolean canReproduceWith(Animal partner) {
@@ -119,7 +123,8 @@ public class Animal implements WorldElement {
         }
 
         // mozemy zmutowac losowo od 0 do 3 genow dziecka
-        int mutationCount = random.nextInt(4);
+        int mutationCount = random.nextInt(4); // potem konfiguracyjnie !!!
+
         for (int i = 0; i < mutationCount; i++) {
             int mutatedGeneIndex = random.nextInt(genes.size());
             int newGeneValue = random.nextInt(8);
