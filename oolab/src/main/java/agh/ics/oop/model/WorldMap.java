@@ -9,13 +9,14 @@ import java.util.stream.Collectors;
 public class WorldMap {
     private final int mapHeight;
     private final int mapWidth;
-    private static int grassToGrowPerStep;
+    private final int grassToGrowPerStep;
 
-    private static Multimap<Vector2d, Object> map = HashMultimap.create(); // WorldElement zamiast Object
-    // albo same zwierzeta i rosliny w innej mapie
+    private static Multimap<Vector2d, Animal> animalsMap = HashMultimap.create();
+    private static Map<Vector2d, Grass> grassMap = new HashMap<>();
 
     private static final double PREFERRED_AREA_RATIO = 0.2;
     private static final double GROWTH_RATIO_AT_PREFERRED_AREA = 0.8;
+
 
     // default
     public WorldMap() {
@@ -28,12 +29,20 @@ public class WorldMap {
         this.grassToGrowPerStep = (int) Math.round(mapWidth * mapHeight * 0.1);
     }
 
-    public static void add(Vector2d position, Object item) {
-        map.put(position, item);
+    public static void addAnimal(Vector2d position, Animal animal) {
+        animalsMap.put(position, animal);
     }
 
-    public void remove(Vector2d position, Object item) {
-        map.remove(position, item);
+    public static void addGrass(Vector2d position, Grass grass) {
+        grassMap.put(position, grass);
+    }
+
+    public void removeAnimal(Vector2d position, Animal animal) {
+        animalsMap.remove(position, animal);
+    }
+
+    public void removeGrass(Vector2d position, Grass grass) {
+        grassMap.remove(position, grass);
     }
 
     public int getMapHeight() {
@@ -44,8 +53,12 @@ public class WorldMap {
         return mapWidth;
     }
 
-    public Collection<Object> getItemsAt(Vector2d position) {
-        return map.get(position);
+    public Collection<Animal> getAnimalsAt(Vector2d position) {
+        return animalsMap.get(position);
+    }
+
+    public Grass getGrassAt(Vector2d position) {
+        return grassMap.get(position);
     }
 
     public void performMove(Animal animal) {
@@ -72,8 +85,8 @@ public class WorldMap {
     }
 
     private void moveAnimal(Vector2d oldPosition, Vector2d newPosition, Animal animal) {
-        remove(oldPosition, animal);
-        add(newPosition, animal);
+        removeAnimal(oldPosition, animal);
+        addAnimal(newPosition, animal);
         animal.setPosition(newPosition);
         animal.loseEnergyAfterMove();
     }
@@ -94,29 +107,19 @@ public class WorldMap {
             if (grass != null) {
                 winner.eat(grass);
                 // Usuwamy zjedzoną trawę z mapy
-                remove(position, grass);
+                removeGrass(position, grass);
             }
 
             if (sortedAnimals.size() > 1) {
                 Animal second = sortedAnimals.get(1);
-                winner.reproduce(second);
+                Optional<Animal> childOptional = winner.reproduce(second);
+
+                if (childOptional.isPresent()) {
+                    Animal child = childOptional.get();
+                    addAnimal(child.getPosition(), child);
+                }
             }
         }
-    }
-
-    private Collection<Animal> getAnimalsAt(Vector2d position) {
-        return getItemsAt(position).stream()
-                .filter(item -> item instanceof Animal)
-                .map(item -> (Animal) item)
-                .toList();
-    }
-
-    private Grass getGrassAt(Vector2d position) {
-        return getItemsAt(position).stream()
-                .filter(item -> item instanceof Grass)
-                .map(item -> (Grass) item)
-                .findFirst()
-                .orElse(null);
     }
 
     // wydzielic do nowej klasy
@@ -130,17 +133,14 @@ public class WorldMap {
     private void deleteDeadAnimals() {
         List<Animal> deadAnimals = new ArrayList<>();
 
-        for (Object item : map.values()) {
-            if (item instanceof Animal) {
-                Animal animal = (Animal) item;
-                if (animal.getEnergyLevel() <= 0) {
-                    deadAnimals.add(animal);
-                }
+        for (Animal animal : animalsMap.values()) {
+            if (animal.getEnergyLevel() <= 0) {
+                deadAnimals.add(animal);
             }
         }
 
         for (Animal deadAnimal : deadAnimals) {
-            remove(deadAnimal.getPosition(), deadAnimal);
+            removeAnimal(deadAnimal.getPosition(), deadAnimal);
         }
     }
 
@@ -152,10 +152,7 @@ public class WorldMap {
     }
 
     private List<Animal> getAllAnimals() {
-        return map.values().stream()
-                .filter(item -> item instanceof Animal)
-                .map(item -> (Animal) item)
-                .toList();
+        return new ArrayList<>(animalsMap.values());
     }
 
     public void handleAnimalReproductionAndEating() {
@@ -199,7 +196,7 @@ public class WorldMap {
             Random random = new Random();
             int grassNutrition = random.nextInt(3) + 1; // Losowa liczba z zakresu 1-3
             Grass grass = new Grass(position, grassNutrition);
-            WorldMap.add(position, grass);
+            grassMap.put(position, grass);
         }
     }
 }

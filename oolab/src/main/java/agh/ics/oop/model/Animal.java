@@ -1,7 +1,10 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.utils.MovementHandler;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class Animal implements WorldElement {
@@ -43,7 +46,7 @@ public class Animal implements WorldElement {
     }
 
     public boolean isAt(Vector2d position) {
-        return this.position == position;
+        return this.position.equals(position);
     }
 
     public Vector2d getPosition() {
@@ -54,6 +57,10 @@ public class Animal implements WorldElement {
         return orientation;
     }
 
+    public int getCurrentGeneIndex() {
+        return currentGeneIndex;
+    }
+
     public int getEnergyLevel() {
         return this.energyLevel;
     }
@@ -62,15 +69,12 @@ public class Animal implements WorldElement {
         return genes;
     }
 
-    public Vector2d intendMove() {   // to jest z wzorca projektowego gdzie Animal to obserwator i zgłasza zamiar rucho a WorldMap zarządza tym ruchem możesz zmienić to jak Ci się nie podoba XD
-        int rotation = genes.get(currentGeneIndex);
-        this.rotate(rotation);
-        Vector2d movement = this.orientation.toUnitVector();
-        Vector2d newPosition = this.position.add(movement);
+    public Vector2d intendMove() {
+        return MovementHandler.intendMove(this);
+    }
 
-        currentGeneIndex = (currentGeneIndex + 1) % genes.size();
-
-        return newPosition;
+    public void setCurrentGeneIndex(int currentGeneIndex) {
+        this.currentGeneIndex = currentGeneIndex;
     }
 
     public void rotate(int rotation) {
@@ -86,10 +90,11 @@ public class Animal implements WorldElement {
     public void eat(Grass grass) {
         energyLevel += grass.getPlantNutrition();
     }
-    public void reproduce(Animal partner) {
+    public Optional<Animal> reproduce(Animal partner) {
         if (canReproduceWith(partner)) {
-            performReproductionWith(partner);
+            return Optional.of(performReproductionWith(partner));
         }
+        return Optional.empty();
     }
 
     public void loseEnergyAfterMove() {
@@ -102,7 +107,7 @@ public class Animal implements WorldElement {
                 partner.getEnergyLevel() >= 8;
     }
 
-    private void performReproductionWith(Animal partner) {
+    private Animal performReproductionWith(Animal partner) {
         this.energyLevel -= 5;
         partner.energyLevel -= 5;
 
@@ -131,6 +136,6 @@ public class Animal implements WorldElement {
             childGenes.set(mutatedGeneIndex, newGeneValue);
         }
 
-        Animal child = new Animal(this.position, 8, genes.size(), childGenes);
+        return new Animal(this.position, 8, genes.size(), childGenes);
     }
 }
