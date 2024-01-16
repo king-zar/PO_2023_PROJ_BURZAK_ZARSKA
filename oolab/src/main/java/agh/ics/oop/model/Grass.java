@@ -22,4 +22,8 @@ public class Grass implements WorldElement {
         return plantNutrition;
     }
 
+    @Override
+    public String toString() {
+        return "*";
+    }
 }

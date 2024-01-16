@@ -48,7 +48,7 @@ class WorldMapTest {
 
         // when
         Vector2d newPosition = new Vector2d(2, mapHeight);
-        map.performMove(animal);
+        map.moveAnimals();
 
         // then
         // assertEquals(mapHeight - 1, animal.getPosition().getY());- wyrzucilabym bo powoduje bledy, bo nie wiemy jak obroci sie zwierze, to zalezne od jego genow
@@ -63,7 +63,7 @@ class WorldMapTest {
 
         // when
         animal.rotate(MapDirection.SOUTH.ordinal());
-        map.performMove(animal);
+        map.moveAnimals();
 
         // then
         // assertEquals(0, animal.getPosition().getY()); - wyrzucilabym bo powoduje bledy, bo nie wiemy jak obroci sie zwierze, to zalezne od jego genow

@@ -12,4 +12,11 @@ public interface WorldElement {
      * @return The position of the world element.
      */
     Vector2d getPosition();
+
+    /**
+     * Get the string representation of the world element.
+     *
+     * @return The string representation of the world element.
+     */
+    String toString();
 }

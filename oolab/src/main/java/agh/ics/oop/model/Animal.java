@@ -138,4 +138,18 @@ public class Animal implements WorldElement {
 
         return new Animal(this.position, 8, genes.size(), childGenes);
     }
+
+    @Override
+    public String toString() {
+        return switch (orientation) {
+            case NORTH -> "N";
+            case NORTHEAST -> "NE";
+            case EAST -> "E";
+            case SOUTHEAST -> "SE";
+            case SOUTH -> "S";
+            case SOUTHWEST -> "SW";
+            case WEST -> "W";
+            case NORTHWEST -> "NW";
+        };
+    }
 }

@@ -1,22 +1,23 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.utils.MapVisualizer;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class WorldMap {
     private final int mapHeight;
     private final int mapWidth;
     private final int grassToGrowPerStep;
+    private final UUID mapId;
 
     private static Multimap<Vector2d, Animal> animalsMap = HashMultimap.create();
     private static Map<Vector2d, Grass> grassMap = new HashMap<>();
 
-    private static final double PREFERRED_AREA_RATIO = 0.2;
-    private static final double GROWTH_RATIO_AT_PREFERRED_AREA = 0.8;
+    private List<MapChangeListener> observers = new ArrayList<>();
 
+    private int bornAnimals = 0; // ile zwierzatek zostalo urodzonych
 
     // default
     public WorldMap() {
@@ -24,9 +25,14 @@ public class WorldMap {
     }
 
     public WorldMap(int mapWidth, int mapHeight) {
+        this(mapWidth, mapHeight, (int) Math.round(mapWidth * mapHeight * 0.1)); // liczba roslinek randomowa
+    }
+
+    public WorldMap(int mapWidth, int mapHeight, int grassToGrowPerStep) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
-        this.grassToGrowPerStep = (int) Math.round(mapWidth * mapHeight * 0.1);
+        this.grassToGrowPerStep = grassToGrowPerStep;
+        this.mapId = UUID.randomUUID();
     }
 
     public static void addAnimal(Vector2d position, Animal animal) {
@@ -53,6 +59,26 @@ public class WorldMap {
         return mapWidth;
     }
 
+    public int getGrassToGrowPerStep() {
+        return grassToGrowPerStep;
+    }
+
+    public UUID getMapId() {
+        return mapId;
+    }
+
+    public int getBornAnimals() {
+        return bornAnimals;
+    }
+
+    public int getAnimalCount() {
+        return animalsMap.size();
+    }
+
+    public int getGrassCount() {
+        return grassMap.size();
+    }
+
     public Collection<Animal> getAnimalsAt(Vector2d position) {
         return animalsMap.get(position);
     }
@@ -61,7 +87,7 @@ public class WorldMap {
         return grassMap.get(position);
     }
 
-    public void performMove(Animal animal) {
+    private void performMove(Animal animal) {
         Vector2d oldPosition = animal.getPosition();
         Vector2d newPosition = animal.intendMove();
 
@@ -117,20 +143,13 @@ public class WorldMap {
                 if (childOptional.isPresent()) {
                     Animal child = childOptional.get();
                     addAnimal(child.getPosition(), child);
+                    bornAnimals += 1;
                 }
             }
         }
     }
 
-    // wydzielic do nowej klasy
-    public void simulateTimeStep() {
-        deleteDeadAnimals();
-        moveAnimals();
-        handleAnimalReproductionAndEating();
-        growGrass();
-    }
-
-    private void deleteDeadAnimals() {
+    public void removeDeadAnimals() {
         List<Animal> deadAnimals = new ArrayList<>();
 
         for (Animal animal : animalsMap.values()) {
@@ -144,7 +163,7 @@ public class WorldMap {
         }
     }
 
-    private void moveAnimals() {
+    public void moveAnimals() {
         List<Animal> animals = getAllAnimals();
         for (Animal animal : animals) {
             performMove(animal);
@@ -165,38 +184,51 @@ public class WorldMap {
         }
     }
 
-    private void growGrass() {
-        Random random = new Random();
-
-        // rownik z dzungla
-        int preferredAreaHeight = (int) (mapHeight * PREFERRED_AREA_RATIO);
-        int preferredAreaYStart = (mapHeight - preferredAreaHeight) / 2;
-        int preferredAreaYEnd = preferredAreaYStart + preferredAreaHeight;
-
-        for (int i=0; i<grassToGrowPerStep; i++) {
-            double probability = random.nextDouble();
-            int x = random.nextInt(mapWidth);
-            int y;
-
-            if (probability <= GROWTH_RATIO_AT_PREFERRED_AREA) {
-                y = random.nextInt(preferredAreaHeight) + preferredAreaYStart; // aby bylo w preferowanym miejscu
-
-            } else {
-                do {
-                    y = random.nextInt(mapHeight);
-                } while (y >= preferredAreaYStart && y < preferredAreaYEnd);
-            }
-
-            addGrass(new Vector2d(x, y));
-        }
-    }
-
-    private void addGrass(Vector2d position) {
+    public void addGrass(Vector2d position) {
         if (getGrassAt(position) == null) { // na danej pozycji moze byc tylko jedna trawa
             Random random = new Random();
             int grassNutrition = random.nextInt(3) + 1; // Losowa liczba z zakresu 1-3
             Grass grass = new Grass(position, grassNutrition);
             grassMap.put(position, grass);
+        }
+    }
+
+    public String toString() {
+        Boundary bounds = getCurrentBounds();
+        MapVisualizer visualizer = new MapVisualizer(this);
+
+        return visualizer.draw(bounds.lowerLeft(), bounds.upperRight());
+    }
+
+    public Boundary getCurrentBounds() {
+        Vector2d lowerLeft = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        Vector2d upperRight = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
+
+        for (Vector2d position : animalsMap.keys()) {
+            lowerLeft = lowerLeft.lowerLeft(position);
+            upperRight = upperRight.upperRight(position);
+        }
+
+        for (Vector2d position : grassMap.keySet()) {
+            lowerLeft = lowerLeft.lowerLeft(position);
+            upperRight = upperRight.upperRight(position);
+        }
+
+        return new Boundary(lowerLeft, upperRight);
+    }
+
+    // observable
+    public void subscribe(MapChangeListener observer) {
+        observers.add(observer);
+    }
+
+    public void unsubscribe(MapChangeListener observer) {
+        observers.remove(observer);
+    }
+
+    public void mapChanged(String message) {
+        for (MapChangeListener observer : observers) {
+            observer.mapChanged(this, message);
         }
     }
 }
