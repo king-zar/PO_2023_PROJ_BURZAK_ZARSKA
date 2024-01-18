@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.utils.MovementHandler;
+import javafx.scene.control.Label;
+import javafx.scene.shape.Circle;
 
 import java.util.ArrayList;
 import java.util.List;

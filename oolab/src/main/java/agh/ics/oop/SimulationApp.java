@@ -34,7 +34,7 @@ public class SimulationApp extends Application {
             BorderPane viewRoot = loader.load();
 
             SimulationPresenter presenter = loader.getController();
-            SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 20, 10, 50, 32);
+            SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 2, 10, 50, 32);
 
 
 
@@ -44,8 +44,9 @@ public class SimulationApp extends Application {
                 Simulation simulation = new Simulation(config);
                 WorldMap worldMap = simulation.getWorldMap();
                 presenter.setWorldMap(worldMap);
+                presenter.setConfig(config);
 
-                while (true) {
+                for (int i=0; i<simulationSteps; i++) {
                     if (presenter.isSimulationRunning()) {
                         simulation.simulateTimeStep();
                         presenter.mapChanged(worldMap, "Zmiana po kroku symulacji");

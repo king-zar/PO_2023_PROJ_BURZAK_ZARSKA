@@ -201,18 +201,8 @@ public class WorldMap {
     }
 
     public Boundary getCurrentBounds() {
-        Vector2d lowerLeft = new Vector2d(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        Vector2d upperRight = new Vector2d(Integer.MIN_VALUE, Integer.MIN_VALUE);
-
-        for (Vector2d position : animalsMap.keys()) {
-            lowerLeft = lowerLeft.lowerLeft(position);
-            upperRight = upperRight.upperRight(position);
-        }
-
-        for (Vector2d position : grassMap.keySet()) {
-            lowerLeft = lowerLeft.lowerLeft(position);
-            upperRight = upperRight.upperRight(position);
-        }
+        Vector2d lowerLeft = new Vector2d(0, 0);
+        Vector2d upperRight = new Vector2d(this.mapWidth, this.mapHeight);
 
         return new Boundary(lowerLeft, upperRight);
     }
