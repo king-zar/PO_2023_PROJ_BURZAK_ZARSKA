@@ -8,6 +8,7 @@
 </ul>
 
 <h3> Do zrobienia: </h3>
+
 - [x] wariant lekka korekta
 - [x] podstawowe GUI
 - [ ] wariant przypływy i odpływy
