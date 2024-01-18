@@ -7,11 +7,21 @@
   <li>1 - lekka korekta</li>
 </ul>
 
-Do zrobienia:
-[] wariant przypływy i odpływy
-[] wielowątkowość
-[] statystyki
-[] skalowanie mapy do rozmiaru okienka
-[] dodanie większej ilości konfiguracji dla użytkownika
-[] testy jednostkowe
-[] obsługa błędów
+<h3> Do zrobienia: </h3>
+- [x] wariant lekka korekta
+- [x] podstawowe GUI
+- [ ] wariant przypływy i odpływy
+- [ ] wielowątkowość
+- [ ] statystyki
+- [ ] skalowanie mapy do rozmiaru okienka
+- [ ] dodanie większej ilości konfiguracji dla użytkownika
+- [ ] testy jednostkowe
+- [ ] obsługa błędów
+- [ ] dodanie losowego kierunku dla zwierzaka nowo narodzonego i rozpoczecie odczytywania genotypu w losowym miejscu 
+- [ ] dodanie kolejności rozwiązywania konfliktów
+- [ ] zatrzymanie pojawiania się roślinek jak nie ma już na nie miejsca na mapie
+- [ ] sprawdzić, czy suma energii organizmów na danym polu po rozmnażaniu jest taka sama jak przed rozmnażaniem
+- [ ] zapisywanie konfiguracji do pliku
+- [ ] wczytywanie konfiguracji z pliku
+
+
