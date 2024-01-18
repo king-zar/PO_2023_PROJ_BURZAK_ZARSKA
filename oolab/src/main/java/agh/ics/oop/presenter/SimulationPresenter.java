@@ -111,22 +111,22 @@ public class SimulationPresenter implements MapChangeListener {
 //        }
 //    }
 
-    private String getLabelForPosition(Collection<Animal> animals, Grass grass) {
-        if (animals.isEmpty() && grass == null) {
-            return "";  // Brak zwierząt i trawy
-        } else if (!animals.isEmpty()) {
-            if (animals.size() == 1) {
-                return animals.iterator().next().toString();  // Jedno zwierzę
-            } else {
-                // Więcej niż jedno zwierzę, pokaż losowe
-                List<Animal> animalsList = new ArrayList<>(animals);
-                Collections.shuffle(animalsList);
-                return animalsList.get(0).toString();
-            }
-        } else {
-            return grass.toString();  // Brak zwierząt, trawa obecna
-        }
-    }
+//    private String getLabelForPosition(Collection<Animal> animals, Grass grass) {
+//        if (animals.isEmpty() && grass == null) {
+//            return "";  // Brak zwierząt i trawy
+//        } else if (!animals.isEmpty()) {
+//            if (animals.size() == 1) {
+//                return animals.iterator().next().toString();  // Jedno zwierzę
+//            } else {
+//                // Więcej niż jedno zwierzę, pokaż losowe
+//                List<Animal> animalsList = new ArrayList<>(animals);
+//                Collections.shuffle(animalsList);
+//                return animalsList.get(0).toString();
+//            }
+//        } else {
+//            return grass.toString();  // Brak zwierząt, trawa obecna
+//        }
+//    }
 
     private void addLabel(int col, int row, Boundary bounds) {
         Vector2d currentPosition = new Vector2d(col, row);
@@ -160,7 +160,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Label createAnimalLabel(Animal animal) {
-        Circle circle = new Circle(CELL_WIDTH / 2);
+        Circle circle = new Circle(Math.min(CELL_WIDTH, CELL_HEIGHT) / 2);
         double energyPercentage = animal.getEnergyLevel() * 1.0 / config.getInitialAnimalEnergy();
         Color color = Color.hsb(270, 1.0, energyPercentage);
         circle.setFill(color);

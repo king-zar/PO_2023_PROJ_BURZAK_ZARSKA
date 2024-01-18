@@ -1,5 +1,9 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.variants.AnimalBehaviorVariant;
+import agh.ics.oop.model.variants.GrassGrowthVariant;
+import agh.ics.oop.model.variants.MutationVariant;
+
 public class SimulationConfig {
     private int mapWidth;
     private int mapHeight;
@@ -10,8 +14,8 @@ public class SimulationConfig {
     private int initialAnimalEnergy;
     // private int energyToReproduce;
     // private int energyLostInReproduction;
-    // private int minMutations;
-    // private int maxMutations;
+    private int minMutations;
+    private int maxMutations;
     private MutationVariant mutationVariant;
     private int genomeLength;
 
@@ -23,7 +27,7 @@ public class SimulationConfig {
 
     public SimulationConfig(int mapWidth, int mapHeight, int simulationSteps,
                             int initialPlantCount, int initialAnimalCount, int initialAnimalEnergy,
-                            MutationVariant mutationVariant,
+                            MutationVariant mutationVariant, int minMutations, int maxMutations,
                             int genomeLength) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
@@ -34,8 +38,8 @@ public class SimulationConfig {
         this.initialAnimalEnergy = initialAnimalEnergy;
 //        this.energyToReproduce = energyToReproduce;
 //        this.energyLostInReproduction = energyLostInReproduction;
-//        this.minMutations = minMutations;
-//        this.maxMutations = maxMutations;
+        this.minMutations = minMutations;
+        this.maxMutations = maxMutations;
         this.mutationVariant = mutationVariant;
         this.genomeLength = genomeLength;
     }
@@ -70,6 +74,14 @@ public class SimulationConfig {
 
     public MutationVariant getMutationVariant() {
         return mutationVariant;
+    }
+
+    public int getMinMutations() {
+        return minMutations;
+    }
+
+    public int getMaxMutations() {
+        return maxMutations;
     }
 }
 

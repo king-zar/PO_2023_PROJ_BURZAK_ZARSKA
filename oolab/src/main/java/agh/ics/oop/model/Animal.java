@@ -1,8 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.utils.MovementHandler;
-import javafx.scene.control.Label;
-import javafx.scene.shape.Circle;
+import agh.ics.oop.model.utils.RandomGenesGenerator;
+import agh.ics.oop.model.variants.MutationVariant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class Animal implements WorldElement {
     }
 
     public Animal(Vector2d position, int energyLevel, int genesNumber) {
-        this(position, energyLevel, genesNumber, generateRandomGenes(genesNumber));
+        this(position, energyLevel, genesNumber, RandomGenesGenerator.generateRandomGenes(genesNumber));
     }
 
     // dla zwierzat dzieci ponizszy konstruktor dziala zawsze
@@ -35,49 +35,22 @@ public class Animal implements WorldElement {
         this.currentGeneIndex = 0;
     }
 
-    private static List<Integer> generateRandomGenes(int n) {
-        List<Integer> randomGenes = new ArrayList<>();
-        Random random = new Random();
+    public void setCurrentGeneIndex(int currentGeneIndex) {
+        this.currentGeneIndex = currentGeneIndex;
+    }
 
-        for (int i = 0; i < n; i++) {
-            // Dodaj losową wartość od 0 do 7 do listy genes
-            randomGenes.add(random.nextInt(8));
-        }
-
-        return randomGenes;
+    public void setPosition(Vector2d newPosition) {
+        this.position = newPosition;
     }
 
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
     }
 
-    public Vector2d getPosition() {
-        return position;
-    }
-
-    public MapDirection getOrientation() {
-        return orientation;
-    }
-
-    public int getCurrentGeneIndex() {
-        return currentGeneIndex;
-    }
-
-    public int getEnergyLevel() {
-        return this.energyLevel;
-    }
-
-    public List<Integer> getGenes() {
-        return genes;
-    }
-
     public Vector2d intendMove() {
         return MovementHandler.intendMove(this);
     }
 
-    public void setCurrentGeneIndex(int currentGeneIndex) {
-        this.currentGeneIndex = currentGeneIndex;
-    }
 
     public void rotate(int rotation) {
         for (int i = 0; i < rotation; i++) {
@@ -85,22 +58,19 @@ public class Animal implements WorldElement {
         }
     }
 
-    public void setPosition(Vector2d newPosition) {
-        this.position = newPosition;
-    }
-
     public void eat(Grass grass) {
         energyLevel += grass.getPlantNutrition();
-    }
-    public Optional<Animal> reproduce(Animal partner, MutationVariant mutationVariant) {
-        if (canReproduceWith(partner)) {
-            return Optional.of(performReproductionWith(partner, mutationVariant));
-        }
-        return Optional.empty();
     }
 
     public void loseEnergyAfterMove() {
         energyLevel -= 1;
+    }
+
+    public Optional<Animal> reproduce(Animal partner, MutationVariant mutationVariant, int minMutations, int maxMutations) {
+        if (canReproduceWith(partner)) {
+            return Optional.of(performReproductionWith(partner, mutationVariant, minMutations, maxMutations));
+        }
+        return Optional.empty();
     }
 
     boolean canReproduceWith(Animal partner) {
@@ -109,7 +79,8 @@ public class Animal implements WorldElement {
                 partner.getEnergyLevel() >= 8;
     }
 
-    private Animal performReproductionWith(Animal partner, MutationVariant mutationVariant) {
+    private Animal performReproductionWith(Animal partner, MutationVariant mutationVariant,
+                                           int minMutations, int maxMutations) {
         this.energyLevel -= 5;
         partner.energyLevel -= 5;
 
@@ -129,20 +100,19 @@ public class Animal implements WorldElement {
             }
         }
 
+        int mutationCount = random.nextInt(maxMutations - minMutations + 1) + minMutations;
 
         if (mutationVariant == MutationVariant.RANDOM) {
-            childGenes = randomMutation(childGenes);
+            childGenes = randomMutation(childGenes, mutationCount);
         } else if (mutationVariant == MutationVariant.SLIGHT_CORRECTION) {
-            childGenes = slightCorrection(childGenes);
+            childGenes = slightCorrection(childGenes, mutationCount);
         }
 
         return new Animal(this.position, 8, childGenes.size(), childGenes);
     }
 
-    public List<Integer> randomMutation(List<Integer> childGenes) {
+    public List<Integer> randomMutation(List<Integer> childGenes, int mutationCount) {
         Random random = new Random();
-
-        int mutationCount = random.nextInt(4); // potem konfiguracyjnie !!!
 
         for (int i = 0; i < mutationCount; i++) {
             int mutatedGeneIndex = random.nextInt(childGenes.size());
@@ -153,11 +123,8 @@ public class Animal implements WorldElement {
         return childGenes;
     }
 
-    public List<Integer> slightCorrection(List<Integer> childGenes) {
-        System.out.println("SLIIIIIIIIIIIIIIIIIIGHTTTTTTTTTT");
+    public List<Integer> slightCorrection(List<Integer> childGenes, int mutationCount) {
         Random random = new Random();
-
-        int mutationCount = random.nextInt(4); // potem konfiguracyjnie !!!
 
         for (int i = 0; i < mutationCount; i++) {
             int mutatedGeneIndex = random.nextInt(childGenes.size());
@@ -181,5 +148,26 @@ public class Animal implements WorldElement {
             case WEST -> "W";
             case NORTHWEST -> "NW";
         };
+    }
+
+    // gettery
+    public Vector2d getPosition() {
+        return position;
+    }
+
+    public MapDirection getOrientation() {
+        return orientation;
+    }
+
+    public int getCurrentGeneIndex() {
+        return currentGeneIndex;
+    }
+
+    public int getEnergyLevel() {
+        return this.energyLevel;
+    }
+
+    public List<Integer> getGenes() {
+        return genes;
     }
 }

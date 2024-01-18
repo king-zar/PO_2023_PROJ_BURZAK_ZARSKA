@@ -12,7 +12,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="agh.ics.oop.StartWindowController"
+      fx:controller="agh.ics.oop.presenter.StartWindowController"
       spacing="10"
       alignment="CENTER"
       minHeight="600.0" minWidth="800.0">
@@ -23,6 +23,14 @@
         <TextField fx:id="heightField"/>
         <Label text="Simulation Steps:"/>
         <TextField fx:id="stepsField"/>
+        <Label text="Initial Plants' Number:"/>
+        <TextField fx:id="plantCount"/>
+        <Label text="Initial Animals' Number:"/>
+        <TextField fx:id="animalCount"/>
+        <Label text="Minimum mutations' number:"/>
+        <TextField fx:id="minMutations"/>
+        <Label text="Maximum mutations' number:"/>
+        <TextField fx:id="maxMutations"/>
 
         <Label text="Mutation Variant:"/>
         <ChoiceBox fx:id="mutationVariantChoiceBox">

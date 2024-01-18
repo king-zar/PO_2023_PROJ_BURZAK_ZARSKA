@@ -1,6 +1,6 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.variants;
 
 // enum dla zachowania zwierzat, rozszerzalny
-enum AnimalBehaviorVariant {
+public enum AnimalBehaviorVariant {
     FULL_PREDESTINATION
 }

@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.MutationVariant;
+import agh.ics.oop.model.variants.MutationVariant;
 import agh.ics.oop.model.Simulation;
 import agh.ics.oop.model.SimulationConfig;
 import agh.ics.oop.model.WorldMap;
@@ -17,13 +17,22 @@ public class SimulationApp extends Application {
     private int mapWidth;
     private int mapHeight;
     private int simulationSteps;
+    private int animalCount;
+    private int plantCount;
     private MutationVariant mutationVariant;
+    private int minMutations;
+    private int maxMutations;
 
-    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps, MutationVariant variant){
+    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps, int animalCount, int plantCount,
+                         MutationVariant variant, int minMutations, int maxMutations){
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         this.simulationSteps = simulationSteps;
+        this.animalCount = animalCount;
+        this.plantCount = plantCount;
         this.mutationVariant = variant;
+        this.minMutations = minMutations;
+        this.maxMutations = maxMutations;
     }
 
     @Override
@@ -33,17 +42,17 @@ public class SimulationApp extends Application {
             loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
             BorderPane viewRoot = loader.load();
 
-            SimulationPresenter presenter = loader.getController();
-            SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 2, 10, 50, mutationVariant, 32);
-
             configureStage(primaryStage, viewRoot);
 
             new Thread(() -> {
+                SimulationPresenter presenter = loader.getController();
+                SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, plantCount, animalCount,
+                        50, mutationVariant, minMutations, maxMutations, 32);
+
                 Simulation simulation = new Simulation(config);
                 WorldMap worldMap = simulation.getWorldMap();
                 presenter.setWorldMap(worldMap);
                 presenter.setConfig(config);
-                worldMap.setMutationVariant(config.getMutationVariant());
 
                 for (int i=0; i<simulationSteps; i++) {
                     if (presenter.isSimulationRunning()) {

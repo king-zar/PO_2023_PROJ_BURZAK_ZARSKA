@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+package agh.ics.oop.model.variants;
 
 // enum dla wariantu mutacji
 public enum MutationVariant {

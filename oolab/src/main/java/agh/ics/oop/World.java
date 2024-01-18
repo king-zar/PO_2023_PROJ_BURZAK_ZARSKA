@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.variants.MutationVariant;
 
 public class World {
     public static void main(String[] args) {
@@ -30,7 +31,7 @@ public class World {
         int genomeLength = 8;
 
         SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount,
-                initialAnimalCount, initialAnimalEnergy, MutationVariant.RANDOM, genomeLength);
+                initialAnimalCount, initialAnimalEnergy, MutationVariant.RANDOM, 1, 3, genomeLength);
 
         // Create and run the simulation
         Simulation simulation = new Simulation(config);

@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import agh.ics.oop.model.variants.MutationVariant;
 import org.junit.jupiter.api.Test;
 
 class AnimalTest {
@@ -49,7 +51,7 @@ class AnimalTest {
         Animal animal2 = new Animal(new Vector2d(2, 2), 10, 7);
 
         // when
-        animal1.reproduce(animal2, MutationVariant.RANDOM);
+        animal1.reproduce(animal2, MutationVariant.RANDOM, 1, 3);
 
         // then
         assertEquals(5, animal1.getEnergyLevel());

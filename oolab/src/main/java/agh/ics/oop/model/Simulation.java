@@ -1,7 +1,5 @@
 package agh.ics.oop.model;
 
-import javafx.application.Platform;
-
 import java.util.Random;
 
 public class Simulation {
@@ -88,7 +86,7 @@ public class Simulation {
     }
 
     private void handleAnimalReproductionAndEating() {
-        worldMap.handleAnimalReproductionAndEating();
+        worldMap.handleAnimalReproductionAndEating(config.getMutationVariant(), config.getMinMutations(), config.getMaxMutations());
     }
 
     public WorldMap getWorldMap() {
