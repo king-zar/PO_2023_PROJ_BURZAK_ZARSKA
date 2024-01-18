@@ -2,6 +2,7 @@ package agh.ics.oop;
 
 import agh.ics.oop.StartWindowController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,6 +37,12 @@ public class StartWindow extends Application {
             widthField = (TextField) loader.getNamespace().get("widthField");
             heightField = (TextField) loader.getNamespace().get("heightField");
             stepsField = (TextField) loader.getNamespace().get("stepsField");
+
+            // jak zamkniemy okienko, to wszystkie potomne tez sie zamkna
+            primaryStage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
 
             Scene scene = new Scene(root, root.getMinWidth(), root.getMinHeight());
             primaryStage.setScene(scene);

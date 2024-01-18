@@ -36,8 +36,6 @@ public class SimulationApp extends Application {
             SimulationPresenter presenter = loader.getController();
             SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 2, 10, 50, 32);
 
-
-
             configureStage(primaryStage, viewRoot);
 
             new Thread(() -> {
