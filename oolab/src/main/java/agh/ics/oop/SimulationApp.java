@@ -6,25 +6,24 @@ import agh.ics.oop.model.SimulationConfig;
 import agh.ics.oop.model.WorldMap;
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class SimulationApp extends Application {
     private int mapWidth;
     private int mapHeight;
     private int simulationSteps;
+    private MutationVariant mutationVariant;
 
-    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps){
+    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps, MutationVariant variant){
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         this.simulationSteps = simulationSteps;
+        this.mutationVariant = variant;
     }
 
     @Override
@@ -35,7 +34,7 @@ public class SimulationApp extends Application {
             BorderPane viewRoot = loader.load();
 
             SimulationPresenter presenter = loader.getController();
-            SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 2, 10, 50, MutationVariant.RANDOM, 32);
+            SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 2, 10, 50, mutationVariant, 32);
 
             configureStage(primaryStage, viewRoot);
 

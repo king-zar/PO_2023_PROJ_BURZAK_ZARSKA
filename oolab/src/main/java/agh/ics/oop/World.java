@@ -1,10 +1,6 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.model.WorldMap;
-import agh.ics.oop.model.SimulationConfig;
-import agh.ics.oop.model.Simulation;
+import agh.ics.oop.model.*;
 
 public class World {
     public static void main(String[] args) {
@@ -34,7 +30,7 @@ public class World {
         int genomeLength = 8;
 
         SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount,
-                initialAnimalCount, initialAnimalEnergy, genomeLength);
+                initialAnimalCount, initialAnimalEnergy, MutationVariant.RANDOM, genomeLength);
 
         // Create and run the simulation
         Simulation simulation = new Simulation(config);

@@ -154,6 +154,7 @@ public class Animal implements WorldElement {
     }
 
     public List<Integer> slightCorrection(List<Integer> childGenes) {
+        System.out.println("SLIIIIIIIIIIIIIIIIIIGHTTTTTTTTTT");
         Random random = new Random();
 
         int mutationCount = random.nextInt(4); // potem konfiguracyjnie !!!
