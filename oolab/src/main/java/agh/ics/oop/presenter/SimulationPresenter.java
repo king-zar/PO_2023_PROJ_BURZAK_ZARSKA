@@ -2,6 +2,7 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.model.MapChangeListener;
 import agh.ics.oop.model.WorldMap;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -13,7 +14,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     private WorldMap worldMap;
 
-    private boolean simulationRunning = false;
+    private boolean simulationRunning = true;
 
     public boolean isSimulationRunning () {
         return simulationRunning;
@@ -21,7 +22,9 @@ public class SimulationPresenter implements MapChangeListener {
 
     @Override
     public void mapChanged(WorldMap map, String message) {
-        drawMap();
+        Platform.runLater(() -> {
+            drawMap();
+        });
     }
 
     public void setWorldMap(WorldMap worldMap) {
@@ -31,7 +34,9 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void drawMap() {
-        infoLabel.setText(worldMap.toString());
+        Platform.runLater(() -> {
+            infoLabel.setText(worldMap.toString());
+        });
     }
 
     @FXML

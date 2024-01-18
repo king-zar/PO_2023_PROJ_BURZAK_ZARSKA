@@ -5,6 +5,7 @@ import agh.ics.oop.model.SimulationConfig;
 import agh.ics.oop.model.WorldMap;
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -33,22 +34,34 @@ public class SimulationApp extends Application {
             BorderPane viewRoot = loader.load();
 
             SimulationPresenter presenter = loader.getController();
-            WorldMap worldMap = initializeWorldMap();
-            presenter.setWorldMap(worldMap);
+            SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 20, 10, 50, 32);
+
+
 
             configureStage(primaryStage, viewRoot);
+
+            new Thread(() -> {
+                Simulation simulation = new Simulation(config);
+                WorldMap worldMap = simulation.getWorldMap();
+                presenter.setWorldMap(worldMap);
+
+                while (true) {
+                    if (presenter.isSimulationRunning()) {
+                        simulation.simulateTimeStep();
+                        presenter.mapChanged(worldMap, "Zmiana po kroku symulacji");
+                    }
+                    try {
+                        Thread.sleep(500); // Dostosuj czas opóźnienia, jeśli potrzebujesz
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
 
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private WorldMap initializeWorldMap() {
-        SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 20, 10, 50, 32);
-        Simulation simulation = new Simulation(config);
-        simulation.runSimulation();
-        return simulation.getWorldMap();
     }
 
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
