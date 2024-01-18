@@ -1,5 +1,6 @@
 package agh.ics.oop;
 
+import agh.ics.oop.model.MutationVariant;
 import agh.ics.oop.model.Simulation;
 import agh.ics.oop.model.SimulationConfig;
 import agh.ics.oop.model.WorldMap;
@@ -34,7 +35,7 @@ public class SimulationApp extends Application {
             BorderPane viewRoot = loader.load();
 
             SimulationPresenter presenter = loader.getController();
-            SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 2, 10, 50, 32);
+            SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, 2, 10, 50, MutationVariant.RANDOM, 32);
 
             configureStage(primaryStage, viewRoot);
 
@@ -43,6 +44,7 @@ public class SimulationApp extends Application {
                 WorldMap worldMap = simulation.getWorldMap();
                 presenter.setWorldMap(worldMap);
                 presenter.setConfig(config);
+                worldMap.setMutationVariant(config.getMutationVariant());
 
                 for (int i=0; i<simulationSteps; i++) {
                     if (presenter.isSimulationRunning()) {

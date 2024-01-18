@@ -12,7 +12,7 @@ public class SimulationConfig {
     // private int energyLostInReproduction;
     // private int minMutations;
     // private int maxMutations;
-    // private MutationVariant mutationVariant;
+    private MutationVariant mutationVariant;
     private int genomeLength;
 
     public static final AnimalBehaviorVariant DEFAULT_ANIMAL_BEHAVIOR_VARIANT = AnimalBehaviorVariant.FULL_PREDESTINATION;
@@ -23,6 +23,7 @@ public class SimulationConfig {
 
     public SimulationConfig(int mapWidth, int mapHeight, int simulationSteps,
                             int initialPlantCount, int initialAnimalCount, int initialAnimalEnergy,
+                            MutationVariant mutationVariant,
                             int genomeLength) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
@@ -35,7 +36,7 @@ public class SimulationConfig {
 //        this.energyLostInReproduction = energyLostInReproduction;
 //        this.minMutations = minMutations;
 //        this.maxMutations = maxMutations;
-//        this.mutationVariant = mutationVariant;
+        this.mutationVariant = mutationVariant;
         this.genomeLength = genomeLength;
     }
 
@@ -65,6 +66,10 @@ public class SimulationConfig {
 
     public int getSimulationSteps() {
         return simulationSteps;
+    }
+
+    public MutationVariant getMutationVariant() {
+        return mutationVariant;
     }
 }
 

@@ -92,9 +92,9 @@ public class Animal implements WorldElement {
     public void eat(Grass grass) {
         energyLevel += grass.getPlantNutrition();
     }
-    public Optional<Animal> reproduce(Animal partner) {
+    public Optional<Animal> reproduce(Animal partner, MutationVariant mutationVariant) {
         if (canReproduceWith(partner)) {
-            return Optional.of(performReproductionWith(partner));
+            return Optional.of(performReproductionWith(partner, mutationVariant));
         }
         return Optional.empty();
     }
@@ -109,7 +109,7 @@ public class Animal implements WorldElement {
                 partner.getEnergyLevel() >= 8;
     }
 
-    private Animal performReproductionWith(Animal partner) {
+    private Animal performReproductionWith(Animal partner, MutationVariant mutationVariant) {
         this.energyLevel -= 5;
         partner.energyLevel -= 5;
 
@@ -129,16 +129,43 @@ public class Animal implements WorldElement {
             }
         }
 
-        // mozemy zmutowac losowo od 0 do 3 genow dziecka
+
+        if (mutationVariant == MutationVariant.RANDOM) {
+            childGenes = randomMutation(childGenes);
+        } else if (mutationVariant == MutationVariant.SLIGHT_CORRECTION) {
+            childGenes = slightCorrection(childGenes);
+        }
+
+        return new Animal(this.position, 8, childGenes.size(), childGenes);
+    }
+
+    public List<Integer> randomMutation(List<Integer> childGenes) {
+        Random random = new Random();
+
         int mutationCount = random.nextInt(4); // potem konfiguracyjnie !!!
 
         for (int i = 0; i < mutationCount; i++) {
-            int mutatedGeneIndex = random.nextInt(genes.size());
+            int mutatedGeneIndex = random.nextInt(childGenes.size());
             int newGeneValue = random.nextInt(8);
             childGenes.set(mutatedGeneIndex, newGeneValue);
         }
 
-        return new Animal(this.position, 8, genes.size(), childGenes);
+        return childGenes;
+    }
+
+    public List<Integer> slightCorrection(List<Integer> childGenes) {
+        Random random = new Random();
+
+        int mutationCount = random.nextInt(4); // potem konfiguracyjnie !!!
+
+        for (int i = 0; i < mutationCount; i++) {
+            int mutatedGeneIndex = random.nextInt(childGenes.size());
+            int mutationDirection = random.nextBoolean() ? 1 : -1; // 1 - w górę, -1 - w dół
+            int newGeneValue = (childGenes.get(mutatedGeneIndex) + mutationDirection + 8) % 8;
+            childGenes.set(mutatedGeneIndex, newGeneValue);
+        }
+
+        return childGenes;
     }
 
     @Override

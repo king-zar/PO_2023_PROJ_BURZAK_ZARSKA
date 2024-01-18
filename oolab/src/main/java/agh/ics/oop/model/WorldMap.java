@@ -16,6 +16,7 @@ public class WorldMap {
     private static Map<Vector2d, Grass> grassMap = new HashMap<>();
 
     private List<MapChangeListener> observers = new ArrayList<>();
+    private MutationVariant mutationVariant;
 
     private int bornAnimals = 0; // ile zwierzatek zostalo urodzonych
 
@@ -33,6 +34,10 @@ public class WorldMap {
         this.mapHeight = mapHeight;
         this.grassToGrowPerStep = grassToGrowPerStep;
         this.mapId = UUID.randomUUID();
+    }
+
+    public void setMutationVariant(MutationVariant variant) {
+        this.mutationVariant = variant;
     }
 
     public static void addAnimal(Vector2d position, Animal animal) {
@@ -138,7 +143,7 @@ public class WorldMap {
 
             if (sortedAnimals.size() > 1) {
                 Animal second = sortedAnimals.get(1);
-                Optional<Animal> childOptional = winner.reproduce(second);
+                Optional<Animal> childOptional = winner.reproduce(second, mutationVariant);
 
                 if (childOptional.isPresent()) {
                     Animal child = childOptional.get();
