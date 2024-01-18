@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="agh.ics.oop.StartWindowController"
+      spacing="10"
+      alignment="CENTER"
+      minHeight="600.0" minWidth="800.0">
+    <children>
+        <Label text="Map Width:"/>
+        <TextField fx:id="widthField"/>
+        <Label text="Map Height:"/>
+        <TextField fx:id="heightField"/>
+        <Label text="Simulation Steps:"/>
+        <TextField fx:id="stepsField"/>
+        <Button text="Start Simulation" onAction="#startSimulation"/>
+    </children>
+</VBox>

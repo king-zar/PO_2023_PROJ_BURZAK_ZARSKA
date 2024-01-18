@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import javafx.application.Platform;
+
 import java.util.Random;
 
 public class Simulation {
