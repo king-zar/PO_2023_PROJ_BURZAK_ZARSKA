@@ -21,11 +21,12 @@ public class Simulation {
     }
 
     private WorldMap initializeWorldMap() {
+        // tu trzeba zmienic zeby WorldMap przyjmowal jeszcze grassToGrowPerStep
         return new WorldMap(config.getMapWidth(), config.getMapHeight(), config.getInitialPlantCount());
     }
 
     private void initializeGrass() {
-        growGrass(worldMap.getGrassToGrowPerStep());
+        growGrass(config.getInitialPlantCount());
     }
 
     private void growGrass(int grassToGrowPerStep) {
@@ -36,6 +37,11 @@ public class Simulation {
         int preferredAreaYEnd = preferredAreaYStart + preferredAreaHeight;
 
         for (int i = 0; i < grassToGrowPerStep; i++) {
+            // nie dodaje roslin jak nie ma juz miejsca na mapie na nowe rosliny
+            if (worldMap.getGrassCount() >= config.getMapWidth() * config.getMapHeight()) {
+                break;
+            }
+
             double probability = random.nextDouble();
             int x = random.nextInt(config.getMapWidth());
             int y;

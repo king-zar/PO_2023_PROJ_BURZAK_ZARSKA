@@ -46,7 +46,6 @@ public class World {
         // For example, you might want to print the final state of the world map
         System.out.println("Final state of the world map:");
         System.out.println(worldMap);
-        System.out.println("Liczba urodzonych zwierzat: " + worldMap.getBornAnimals());
         System.out.println("Liczba wszystkich zwierzat: " + worldMap.getAnimalCount());
 
         System.out.println("System zakonczyl dzialanie");
