@@ -17,6 +17,9 @@ public class Animal implements WorldElement {
     private List<Integer> genes;
     private int currentGeneIndex;
 
+    private int age;
+    private int childsNumber;
+
     // default
     public Animal (Vector2d position) {
         this(position, 10, 7);
@@ -33,6 +36,8 @@ public class Animal implements WorldElement {
         this.energyLevel = energyLevel;
         this.genes = new ArrayList<>(genes); // kopia aby uniknąć wpływu zewnętrznych zmian
         this.currentGeneIndex = 0;
+        this.age = 1; // 1 krok czasowy
+        this.childsNumber = 0;
     }
 
     public void setCurrentGeneIndex(int currentGeneIndex) {
@@ -51,6 +56,16 @@ public class Animal implements WorldElement {
         return MovementHandler.intendMove(this);
     }
 
+    // settery dla nowonarodzonego zwierzatka
+    private void setRandomOrientation() {
+        Random random = new Random();
+        int rotation = random.nextInt(8); // Losujemy wartość od 0 do 7
+        rotate(rotation); // Obracamy zwierzaka o wylosowaną ilość razy
+    }
+
+    private void setRandomCurrentGeneIndex() {
+        this.currentGeneIndex = new Random().nextInt(this.genes.size());
+    }
 
     public void rotate(int rotation) {
         for (int i = 0; i < rotation; i++) {
@@ -64,6 +79,10 @@ public class Animal implements WorldElement {
 
     public void loseEnergyAfterMove() {
         energyLevel -= 1;
+    }
+
+    public void getOlder() {
+        age += 1;
     }
 
     public Optional<Animal> reproduce(Animal partner, MutationVariant mutationVariant, int minMutations, int maxMutations) {
@@ -81,8 +100,12 @@ public class Animal implements WorldElement {
 
     private Animal performReproductionWith(Animal partner, MutationVariant mutationVariant,
                                            int minMutations, int maxMutations) {
-        this.energyLevel -= 5;
-        partner.energyLevel -= 5;
+        int energyLostAfterReproduction = 5;
+        this.energyLevel -= energyLostAfterReproduction;
+        partner.energyLevel -= energyLostAfterReproduction;
+
+        this.childsNumber += 1;
+        this.childsNumber += 1;
 
         int totalEnergyBeforeReproduction = this.getEnergyLevel() + partner.getEnergyLevel();
         int thisGenesContribution = (this.getEnergyLevel() * genes.size()) / totalEnergyBeforeReproduction;
@@ -108,7 +131,11 @@ public class Animal implements WorldElement {
             childGenes = slightCorrection(childGenes, mutationCount);
         }
 
-        return new Animal(this.position, 8, childGenes.size(), childGenes);
+        Animal child = new Animal(this.position, 2*energyLostAfterReproduction, childGenes.size(), childGenes);
+        child.setRandomCurrentGeneIndex();
+        child.setRandomOrientation();
+
+        return child;
     }
 
     public List<Integer> randomMutation(List<Integer> childGenes, int mutationCount) {
@@ -164,10 +191,18 @@ public class Animal implements WorldElement {
     }
 
     public int getEnergyLevel() {
-        return this.energyLevel;
+        return energyLevel;
     }
 
     public List<Integer> getGenes() {
         return genes;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public int getChildsNumber() {
+        return childsNumber;
     }
 }

@@ -161,7 +161,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     private Label createAnimalLabel(Animal animal) {
         Circle circle = new Circle(Math.min(CELL_WIDTH, CELL_HEIGHT) / 2);
-        double energyPercentage = animal.getEnergyLevel() * 1.0 / config.getInitialAnimalEnergy();
+        double energyPercentage = Math.min((animal.getEnergyLevel() * 1.0 / config.getInitialAnimalEnergy()), 1.0);
         Color color = Color.hsb(270, 1.0, energyPercentage);
         circle.setFill(color);
 

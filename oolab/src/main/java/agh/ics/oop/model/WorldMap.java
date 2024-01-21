@@ -18,8 +18,6 @@ public class WorldMap {
 
     private List<MapChangeListener> observers = new ArrayList<>();
 
-    private int bornAnimals = 0; // ile zwierzatek zostalo urodzonych
-
     // default
     public WorldMap() {
         this(10, 10);
@@ -75,6 +73,7 @@ public class WorldMap {
         List<Animal> animals = getAllAnimals();
         for (Animal animal : animals) {
             performMove(animal);
+            animal.getOlder(); // podczas ruchu zwierze sie starzeje
         }
     }
 
@@ -85,7 +84,6 @@ public class WorldMap {
         if (isPositionWithinBounds(newPosition)) {
             newPosition = wrapPosition(newPosition);
             moveAnimal(oldPosition, newPosition, animal);
-//            resolveConflictAtPosition(newPosition); -- bez sensu tu bo najpierw wszystkie zwierzeta robia ruch a potem rozwiazujemy konflikt
         }
     }
 
@@ -121,21 +119,28 @@ public class WorldMap {
     private void resolveConflictAtPosition(Vector2d position, MutationVariant mutationVariant,
                                            int minMutations, int maxMutations) {
         Collection<Animal> animalsAtPosition = getAnimalsAt(position);
+        Grass grass = getGrassAt(position);
 
-        if (animalsAtPosition.size() > 1) {
+        if (animalsAtPosition.size() == 1) {
+            Animal singleAnimal = animalsAtPosition.iterator().next();
+
+            if (grass != null) {
+                eatGrass(singleAnimal, grass, position);
+            }
+
+        } else if (animalsAtPosition.size() > 1) {
 
             List<Animal> sortedAnimals = animalsAtPosition.stream()
-                    .sorted(Comparator.comparing(Animal::getEnergyLevel).reversed())
+                    .sorted(Comparator.comparing(Animal::getEnergyLevel)
+                            .thenComparing(Animal::getAge)
+                            .thenComparing(Animal::getChildsNumber)
+                            .thenComparing(animal -> new Random().nextInt()))
                     .toList();
 
             Animal winner = sortedAnimals.get(0);
 
-            Grass grass = getGrassAt(position);
-
             if (grass != null) {
-                winner.eat(grass);
-                // Usuwamy zjedzoną trawę z mapy
-                removeGrass(position, grass);
+                eatGrass(winner, grass, position);
             }
 
             if (sortedAnimals.size() > 1) {
@@ -145,10 +150,14 @@ public class WorldMap {
                 if (childOptional.isPresent()) {
                     Animal child = childOptional.get();
                     addAnimal(child.getPosition(), child);
-                    bornAnimals += 1;
                 }
             }
         }
+    }
+
+    private void eatGrass(Animal animal, Grass grass, Vector2d position) {
+        animal.eat(grass);
+        removeGrass(position, grass);
     }
 
     public String toString() {
@@ -188,10 +197,6 @@ public class WorldMap {
 
     public UUID getMapId() {
         return mapId;
-    }
-
-    public int getBornAnimals() {
-        return bornAnimals;
     }
 
     public int getAnimalCount() {

@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import agh.ics.oop.model.variants.MutationVariant;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 class AnimalTest {
     @Test
     public void doesAnimalRotateCorrectly() {

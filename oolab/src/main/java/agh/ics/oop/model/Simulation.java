@@ -71,7 +71,6 @@ public class Simulation {
         deleteDeadAnimals();
         moveAnimals();
         handleAnimalReproductionAndEating();
-        worldMap.mapChanged("Zmiana po kroku symulacji");
         growGrass(worldMap.getGrassToGrowPerStep());
 
         worldMap.mapChanged("Zmiana po kroku symulacji");
