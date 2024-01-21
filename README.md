@@ -18,10 +18,10 @@
 - [ ] dodanie większej ilości konfiguracji dla użytkownika
 - [ ] testy jednostkowe
 - [ ] obsługa błędów
-- [ ] dodanie losowego kierunku dla zwierzaka nowo narodzonego i rozpoczecie odczytywania genotypu w losowym miejscu 
-- [ ] dodanie kolejności rozwiązywania konfliktów
+- [x] dodanie losowego kierunku dla zwierzaka nowo narodzonego i rozpoczecie odczytywania genotypu w losowym miejscu 
+- [x] dodanie kolejności rozwiązywania konfliktów
 - [ ] zatrzymanie pojawiania się roślinek jak nie ma już na nie miejsca na mapie
-- [ ] sprawdzić, czy suma energii organizmów na danym polu po rozmnażaniu jest taka sama jak przed rozmnażaniem
+- [x] sprawdzić, czy suma energii organizmów na danym polu po rozmnażaniu jest taka sama jak przed rozmnażaniem
 - [ ] zapisywanie konfiguracji do pliku
 - [ ] wczytywanie konfiguracji z pliku
 
