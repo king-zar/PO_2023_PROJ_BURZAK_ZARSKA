@@ -215,6 +215,22 @@ public class WorldMap {
         return grassMap.get(position);
     }
 
+    public List<Vector2d> getAvailableGrassPositions(int yStart, int areaHeight) {
+        List<Vector2d> availablePositions = new ArrayList<>();
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = yStart; y < yStart + areaHeight; y++) {
+                Vector2d position = new Vector2d(x, y);
+
+                // gdy pozycja wolna i nalezy do obszaru
+                if (getGrassAt(position) == null) {
+                    availablePositions.add(position);
+                }
+            }
+        }
+        return availablePositions;
+    }
+
+
     public Boundary getCurrentBounds() {
         Vector2d lowerLeft = new Vector2d(0, 0);
         Vector2d upperRight = new Vector2d(this.mapWidth, this.mapHeight);

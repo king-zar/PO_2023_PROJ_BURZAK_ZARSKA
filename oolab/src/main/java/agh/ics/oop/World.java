@@ -1,6 +1,7 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.model.variants.MapVariant;
 import agh.ics.oop.model.variants.MutationVariant;
 
 public class World {
@@ -30,8 +31,8 @@ public class World {
         int initialAnimalEnergy = 10;
         int genomeLength = 8;
 
-        SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount,
-                initialAnimalCount, initialAnimalEnergy, MutationVariant.RANDOM, 1, 3, genomeLength);
+        SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount, 5,
+                initialAnimalCount, initialAnimalEnergy, MutationVariant.RANDOM, 1, 3, genomeLength, MapVariant.EARTH_LIKE);
 
         // Create and run the simulation
         Simulation simulation = new Simulation(config);

@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
 
 public class Simulation {
     private WorldMap worldMap;
@@ -21,8 +23,7 @@ public class Simulation {
     }
 
     private WorldMap initializeWorldMap() {
-        // tu trzeba zmienic zeby WorldMap przyjmowal jeszcze grassToGrowPerStep
-        return new WorldMap(config.getMapWidth(), config.getMapHeight(), config.getInitialPlantCount());
+        return new WorldMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep());
     }
 
     private void initializeGrass() {
@@ -31,31 +32,45 @@ public class Simulation {
 
     private void growGrass(int grassToGrowPerStep) {
         Random random = new Random();
+        int grassGrown = 0;
 
         int preferredAreaHeight = (int) (config.getMapHeight() * PREFERRED_AREA_RATIO);
         int preferredAreaYStart = (config.getMapHeight() - preferredAreaHeight) / 2;
-        int preferredAreaYEnd = preferredAreaYStart + preferredAreaHeight;
 
-        for (int i = 0; i < grassToGrowPerStep; i++) {
-            // nie dodaje roslin jak nie ma juz miejsca na mapie na nowe rosliny
-            if (worldMap.getGrassCount() >= config.getMapWidth() * config.getMapHeight()) {
-                break;
-            }
+        List<Vector2d> availablePositionsWholeMap = worldMap.getAvailableGrassPositions(0, worldMap.getMapHeight());
+        List<Vector2d> availablePrefferedPositions = worldMap.getAvailableGrassPositions(preferredAreaYStart, preferredAreaHeight);
 
+        System.out.println("Available: " + availablePositionsWholeMap.size());
+        // aby dostac tylko pozycje spoza preferowanego obszaru
+        List<Vector2d> availablePositionsNotPreffered = new ArrayList<>(availablePositionsWholeMap);
+        availablePositionsNotPreffered.removeAll(availablePrefferedPositions);
+
+        int availablePositionsCount = availablePositionsWholeMap.size();
+
+        for (int i = 0; i < Math.min(grassToGrowPerStep, availablePositionsCount); i++) { // gdy size = 0 nie doda w ogole
             double probability = random.nextDouble();
-            int x = random.nextInt(config.getMapWidth());
-            int y;
 
-            if (probability <= GROWTH_RATIO_AT_PREFERRED_AREA) {
-                y = random.nextInt(preferredAreaHeight) + preferredAreaYStart;
+            if (probability <= GROWTH_RATIO_AT_PREFERRED_AREA && !availablePrefferedPositions.isEmpty()) {
+                Vector2d preferredPosition = getRandomPositionFromList(availablePrefferedPositions);
+                worldMap.addGrass(preferredPosition);
+                grassGrown += 1;
+                availablePrefferedPositions.remove(preferredPosition);
+
             } else {
-                do {
-                    y = random.nextInt(config.getMapHeight());
-                } while (y >= preferredAreaYStart && y < preferredAreaYEnd);
+                Vector2d notPreferredPosition = getRandomPositionFromList(availablePositionsNotPreffered);
+                worldMap.addGrass(notPreferredPosition);
+                grassGrown += 1;
+                availablePositionsNotPreffered.remove(notPreferredPosition);
             }
-
-            worldMap.addGrass(new Vector2d(x, y));
         }
+
+        System.out.println("Grown: " + grassGrown);
+    }
+
+    public Vector2d getRandomPositionFromList(List<Vector2d> positions) {
+        Random random = new Random();
+        int randomIndex = random.nextInt(positions.size());
+        return positions.get(randomIndex);
     }
 
     private void initializeAnimals() {

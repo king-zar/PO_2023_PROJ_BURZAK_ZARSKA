@@ -1,12 +1,14 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.SimulationApp;
+import agh.ics.oop.model.variants.MapVariant;
 import agh.ics.oop.model.variants.MutationVariant;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class StartWindowController {
@@ -24,7 +26,10 @@ public class StartWindowController {
     private TextField animalCount;
 
     @FXML
-    private TextField plantCount;
+    private TextField initialPlantCount;
+
+    @FXML
+    private TextField plantToGrowPerStep;
 
     @FXML
     private TextField minMutations;
@@ -36,8 +41,18 @@ public class StartWindowController {
     private ChoiceBox<String> mutationVariantChoiceBox;
 
     @FXML
+    private ChoiceBox<String> mapVariantChoiceBox;
+
+    @FXML
+    private BorderPane rootBorderPane; // Zmiana typu na BorderPane
+
+    @FXML
     private void initialize() {
         mutationVariantChoiceBox.setItems(FXCollections.observableArrayList("RANDOM", "SLIGHT_CORRECTION"));
+        mutationVariantChoiceBox.setValue("RANDOM"); // domyslnie RANDOM
+
+        mapVariantChoiceBox.setItems(FXCollections.observableArrayList("EARTH_LIKE", "TIDES_OUTFLOWS"));
+        mapVariantChoiceBox.setValue("EARTH_LIKE"); // domyslnie EARTH_LIKE
     }
 
     @FXML
@@ -49,10 +64,12 @@ public class StartWindowController {
                 Integer.parseInt(heightField.getText()),
                 Integer.parseInt(stepsField.getText()),
                 Integer.parseInt(animalCount.getText()),
-                Integer.parseInt(plantCount.getText()),
+                Integer.parseInt(initialPlantCount.getText()),
+                Integer.parseInt(plantToGrowPerStep.getText()),
                 MutationVariant.valueOf(mutationVariantChoiceBox.getValue()),
                 Integer.parseInt(minMutations.getText()),
-                Integer.parseInt(maxMutations.getText())
+                Integer.parseInt(maxMutations.getText()),
+                MapVariant.valueOf(mapVariantChoiceBox.getValue())
         );
 
         simulationApp.start(new Stage());

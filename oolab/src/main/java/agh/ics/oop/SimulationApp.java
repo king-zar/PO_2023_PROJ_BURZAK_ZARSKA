@@ -1,5 +1,6 @@
 package agh.ics.oop;
 
+import agh.ics.oop.model.variants.MapVariant;
 import agh.ics.oop.model.variants.MutationVariant;
 import agh.ics.oop.model.Simulation;
 import agh.ics.oop.model.SimulationConfig;
@@ -18,21 +19,26 @@ public class SimulationApp extends Application {
     private int mapHeight;
     private int simulationSteps;
     private int animalCount;
-    private int plantCount;
+    private int initialPlantCount;
+    private int plantToGrowPerStep;
     private MutationVariant mutationVariant;
     private int minMutations;
     private int maxMutations;
+    private MapVariant mapVariant;
 
-    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps, int animalCount, int plantCount,
-                         MutationVariant variant, int minMutations, int maxMutations){
+    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps, int animalCount, int initialPlantCount,
+                         int plantToGrowPerStep, MutationVariant variant, int minMutations, int maxMutations,
+                         MapVariant mapVariant){
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         this.simulationSteps = simulationSteps;
         this.animalCount = animalCount;
-        this.plantCount = plantCount;
+        this.initialPlantCount = initialPlantCount;
+        this.plantToGrowPerStep = plantToGrowPerStep;
         this.mutationVariant = variant;
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
+        this.mapVariant = mapVariant;
     }
 
     @Override
@@ -46,8 +52,8 @@ public class SimulationApp extends Application {
 
             new Thread(() -> {
                 SimulationPresenter presenter = loader.getController();
-                SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, plantCount, animalCount,
-                        50, mutationVariant, minMutations, maxMutations, 32);
+                SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount, plantToGrowPerStep,
+                        animalCount, 50, mutationVariant, minMutations, maxMutations, 32, mapVariant);
 
                 Simulation simulation = new Simulation(config);
                 WorldMap worldMap = simulation.getWorldMap();
