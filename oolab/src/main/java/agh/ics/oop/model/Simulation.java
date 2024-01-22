@@ -1,6 +1,7 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.model.variants.MapVariant;
+import agh.ics.oop.presenter.SimulationPresenter;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,6 +10,7 @@ import java.util.List;
 public class Simulation {
     private TidesOutflowsMap worldMap;
     private SimulationConfig config;
+    private SimulationPresenter presenter;
 
     private static final double PREFERRED_AREA_RATIO = 0.2;
     private static final double GROWTH_RATIO_AT_PREFERRED_AREA = 0.8;
@@ -22,6 +24,10 @@ public class Simulation {
         this.worldMap.subscribe(consoleMapDisplay);
         initializeGrass();
         initializeAnimals();
+    }
+
+    public void setPresenter(SimulationPresenter presenter) {
+        this.presenter = presenter;
     }
 
     private TidesOutflowsMap initializeMap() {
@@ -46,7 +52,6 @@ public class Simulation {
         List<Vector2d> availablePositionsWholeMap = worldMap.getAvailableGrassPositions(0, worldMap.getMapHeight());
         List<Vector2d> availablePrefferedPositions = worldMap.getAvailableGrassPositions(preferredAreaYStart, preferredAreaHeight);
 
-        System.out.println("Available: " + availablePositionsWholeMap.size());
         // aby dostac tylko pozycje spoza preferowanego obszaru
         List<Vector2d> availablePositionsNotPreffered = new ArrayList<>(availablePositionsWholeMap);
         availablePositionsNotPreffered.removeAll(availablePrefferedPositions);
@@ -69,8 +74,6 @@ public class Simulation {
                 availablePositionsNotPreffered.remove(notPreferredPosition);
             }
         }
-
-        System.out.println("Grown: " + grassGrown);
     }
 
     public Vector2d getRandomPositionFromList(List<Vector2d> positions) {

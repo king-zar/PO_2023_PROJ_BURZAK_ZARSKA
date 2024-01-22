@@ -238,8 +238,7 @@ public class WorldMap {
         return new Boundary(lowerLeft, upperRight);
     }
 
-    private List<Animal> getAllAnimals() {
+    public List<Animal> getAllAnimals() {
         return new ArrayList<>(animalsMap.values());
     }
-
 }

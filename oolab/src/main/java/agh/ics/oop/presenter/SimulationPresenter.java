@@ -96,38 +96,6 @@ public class SimulationPresenter implements MapChangeListener {
         }
     }
 
-//    private void addLabel(int col, int row, Boundary bounds) {
-//        Vector2d currentPosition = new Vector2d(col, row);
-//
-//        Collection<Animal> animalsAtPosition = worldMap.getAnimalsAt(currentPosition);
-//        Grass grassAtPosition = worldMap.getGrassAt(currentPosition);
-//
-//        String labelContent = getLabelForPosition(animalsAtPosition, grassAtPosition);
-//
-//        if (!labelContent.isEmpty()) {
-//            Label label = new Label(labelContent);
-//            GridPane.setHalignment(label, HPos.CENTER);
-//            mapGrid.add(label, col - bounds.lowerLeft().getX(), row - bounds.lowerLeft().getY());
-//        }
-//    }
-
-//    private String getLabelForPosition(Collection<Animal> animals, Grass grass) {
-//        if (animals.isEmpty() && grass == null) {
-//            return "";  // Brak zwierząt i trawy
-//        } else if (!animals.isEmpty()) {
-//            if (animals.size() == 1) {
-//                return animals.iterator().next().toString();  // Jedno zwierzę
-//            } else {
-//                // Więcej niż jedno zwierzę, pokaż losowe
-//                List<Animal> animalsList = new ArrayList<>(animals);
-//                Collections.shuffle(animalsList);
-//                return animalsList.get(0).toString();
-//            }
-//        } else {
-//            return grass.toString();  // Brak zwierząt, trawa obecna
-//        }
-//    }
-
     private void addLabel(int col, int row, Boundary bounds) {
         Vector2d currentPosition = new Vector2d(col, row);
 
