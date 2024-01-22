@@ -86,8 +86,25 @@ public class TidesOutflowsMap extends WorldMap {
         tideTime = false;
     }
 
-    private void performOutflow (int waterAmount) {
-        // tu bedzie obsluga odplywu wywolana
+    private void performOutflow(int waterAmount) {
+        Random random = new Random();
+
+        for (int i = 0; i <= currentWaterAreaId; i++) {
+            List<Vector2d> waterAreaPositions = getWaterPositionsByAreaId(i);
+
+            waterAreaPositions.sort(Comparator.comparingInt(v -> v.getX() + v.getY()));
+
+            if (!waterAreaPositions.isEmpty()) {
+                for (int a = 0; a < waterAmount && !waterAreaPositions.isEmpty(); a++) {
+                    // losowe usuniecie pozycji z poczatku lub konca listy
+                    int randomIndex = random.nextBoolean() ? 0 : waterAreaPositions.size()-1;
+                    Vector2d removedPosition = waterAreaPositions.remove(randomIndex);
+
+                    waterAreas.remove(removedPosition);
+                }
+            }
+        }
+
         tideTime = true;
     }
 
