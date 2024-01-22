@@ -11,7 +11,8 @@
 
 - [x] wariant lekka korekta
 - [x] podstawowe GUI
-- [ ] wariant przypływy i odpływy
+- [x] wariant przypływy i odpływy
+- [ ] dodać implementację odpływów
 - [ ] wielowątkowość
 - [ ] statystyki
 - [ ] skalowanie mapy do rozmiaru okienka
@@ -20,9 +21,10 @@
 - [ ] obsługa błędów
 - [x] dodanie losowego kierunku dla zwierzaka nowo narodzonego i rozpoczecie odczytywania genotypu w losowym miejscu 
 - [x] dodanie kolejności rozwiązywania konfliktów
-- [ ] zatrzymanie pojawiania się roślinek jak nie ma już na nie miejsca na mapie
+- [x] zatrzymanie pojawiania się roślinek jak nie ma już na nie miejsca na mapie
 - [x] sprawdzić, czy suma energii organizmów na danym polu po rozmnażaniu jest taka sama jak przed rozmnażaniem
 - [ ] zapisywanie konfiguracji do pliku
 - [ ] wczytywanie konfiguracji z pliku
+- [ ] zatrzymanie symulacji, jeśli nie ma już żywych zwierząt
 
 
