@@ -88,7 +88,7 @@ class WorldMapTest {
         int totalBefore = animal.getEnergyLevel() + partner.getEnergyLevel();
 
         // when
-        map.handleAnimalReproductionAndEating(MutationVariant.RANDOM, 1, 3);
+        map.handleAnimalReproductionAndEating(MutationVariant.RANDOM, 1, 3, 10, 5);
 
         int totalAfter = 0;
         Collection<Animal> animalsAtPosition = map.getAnimalsAt(animal.getPosition());

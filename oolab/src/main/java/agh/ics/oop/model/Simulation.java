@@ -32,9 +32,11 @@ public class Simulation {
 
     private TidesOutflowsMap initializeMap() {
         if (config.getMapVariant() == MapVariant.EARTH_LIKE) {
-            return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(), 0, 0);
+            return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(),
+                    config.getWaterAreasCount(), config.getInitialWaterAreaSize(), config.getMaxPlantNutrition());
         } else {
-            return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(), 2, 4);
+            return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(),
+                    2, 4, config.getMaxPlantNutrition());
         }
     }
 
@@ -112,7 +114,7 @@ public class Simulation {
     }
 
     private void tideOrOutflow() {
-        worldMap.tideOrOutflow(3);
+        worldMap.tideOrOutflow(config.getInflowOutflowSize());
     }
 
     private void moveAnimals() {
@@ -120,7 +122,8 @@ public class Simulation {
     }
 
     private void handleAnimalReproductionAndEating() {
-        worldMap.handleAnimalReproductionAndEating(config.getMutationVariant(), config.getMinMutations(), config.getMaxMutations());
+        worldMap.handleAnimalReproductionAndEating(config.getMutationVariant(), config.getMinMutations(),
+                config.getMaxMutations(), config.getEnergyToReproduce(), config.getEnergyLostInReproduction());
     }
 
     public TidesOutflowsMap getWorldMap() {

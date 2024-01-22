@@ -89,24 +89,26 @@ public class Animal implements WorldElement {
         age += 1;
     }
 
-    public Optional<Animal> reproduce(Animal partner, MutationVariant mutationVariant, int minMutations, int maxMutations) {
-        if (canReproduceWith(partner)) {
-            return Optional.of(performReproductionWith(partner, mutationVariant, minMutations, maxMutations));
+    public Optional<Animal> reproduce(Animal partner, MutationVariant mutationVariant, int minMutations, int maxMutations,
+                                      int energyToReproduce, int energyLostInReproduction) {
+        if (canReproduceWith(partner, energyToReproduce)) {
+            return Optional.of(performReproductionWith(partner, mutationVariant, minMutations, maxMutations,
+                                energyLostInReproduction));
         }
         return Optional.empty();
     }
 
-    boolean canReproduceWith(Animal partner) {
+    boolean canReproduceWith(Animal partner, int energyToReproduce) {
         return this.position.equals(partner.getPosition()) &&
-                this.energyLevel >= 8 &&
-                partner.getEnergyLevel() >= 8;
+                this.energyLevel >= energyToReproduce &&
+                partner.getEnergyLevel() >= energyToReproduce;
     }
 
     private Animal performReproductionWith(Animal partner, MutationVariant mutationVariant,
-                                           int minMutations, int maxMutations) {
-        int energyLostAfterReproduction = 5;
-        this.energyLevel -= energyLostAfterReproduction;
-        partner.energyLevel -= energyLostAfterReproduction;
+                                           int minMutations, int maxMutations,
+                                           int energyLostInReproduction) {
+        this.energyLevel -= energyLostInReproduction;
+        partner.energyLevel -= energyLostInReproduction;
 
         this.childsNumber += 1;
         this.childsNumber += 1;
@@ -135,7 +137,7 @@ public class Animal implements WorldElement {
             childGenes = slightCorrection(childGenes, mutationCount);
         }
 
-        Animal child = new Animal(this.position, 2*energyLostAfterReproduction, childGenes.size(), childGenes);
+        Animal child = new Animal(this.position, 2*energyLostInReproduction, childGenes.size(), childGenes);
         child.setRandomCurrentGeneIndex();
         child.setRandomOrientation();
 

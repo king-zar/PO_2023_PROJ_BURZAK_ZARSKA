@@ -32,7 +32,8 @@ public class World {
         int genomeLength = 8;
 
         SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount, 5,
-                initialAnimalCount, initialAnimalEnergy, MutationVariant.RANDOM, 1, 3, genomeLength, MapVariant.EARTH_LIKE);
+                initialAnimalCount, initialAnimalEnergy, 10, 5, MutationVariant.RANDOM,
+                1, 3, genomeLength, MapVariant.EARTH_LIKE, 2, 0, 0, 0);
 
         // Create and run the simulation
         Simulation simulation = new Simulation(config);

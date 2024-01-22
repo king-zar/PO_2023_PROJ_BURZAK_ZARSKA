@@ -15,13 +15,17 @@ public class SimulationConfig {
     private int plantToGrowPerStep;
     private int initialAnimalCount;
     private int initialAnimalEnergy;
-    // private int energyToReproduce;
-    // private int energyLostInReproduction;
+    private int energyToReproduce;
+    private int energyLostInReproduction;
     private int minMutations;
     private int maxMutations;
     private MutationVariant mutationVariant;
     private int genomeLength;
     private MapVariant mapVariant;
+    private int maxPlantNutrition;
+    private int waterAreasCount;
+    private int initialWaterAreaSize;
+    private int inflowOutflowSize;
 
     public static final AnimalBehaviorVariant DEFAULT_ANIMAL_BEHAVIOR_VARIANT = AnimalBehaviorVariant.FULL_PREDESTINATION;
     public static final GrassGrowthVariant DEFAULT_PLANT_GROWTH_VARIANT = GrassGrowthVariant.RANDOM;
@@ -29,10 +33,11 @@ public class SimulationConfig {
 
     // konstruktory, gettery, settery
 
-    public SimulationConfig(int mapWidth, int mapHeight, int simulationSteps,
-                            int initialPlantCount, int plantToGrowPerStep, int initialAnimalCount, int initialAnimalEnergy,
+    public SimulationConfig(int mapWidth, int mapHeight, int simulationSteps, int initialPlantCount, int plantToGrowPerStep,
+                            int initialAnimalCount, int initialAnimalEnergy, int energyToReproduce, int energyLostInReproduction,
                             MutationVariant mutationVariant, int minMutations, int maxMutations,
-                            int genomeLength, MapVariant mapVariant) {
+                            int genomeLength, MapVariant mapVariant, int maxPlantNutrition,
+                            int waterAreasCount, int initialWaterAreaSize, int inflowOutflowSize) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         this.simulationSteps = simulationSteps;
@@ -40,13 +45,17 @@ public class SimulationConfig {
         this.plantToGrowPerStep = plantToGrowPerStep;
         this.initialAnimalCount = initialAnimalCount;
         this.initialAnimalEnergy = initialAnimalEnergy;
-//        this.energyToReproduce = energyToReproduce;
-//        this.energyLostInReproduction = energyLostInReproduction;
+        this.energyToReproduce = energyToReproduce;
+        this.energyLostInReproduction = energyLostInReproduction;
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
         this.mutationVariant = mutationVariant;
         this.genomeLength = genomeLength;
         this.mapVariant = mapVariant;
+        this.maxPlantNutrition = maxPlantNutrition;
+        this.waterAreasCount = waterAreasCount;
+        this.initialWaterAreaSize = initialWaterAreaSize;
+        this.inflowOutflowSize = inflowOutflowSize;
     }
 
     public int getMapHeight() {
@@ -95,6 +104,30 @@ public class SimulationConfig {
 
     public MapVariant getMapVariant() {
         return mapVariant;
+    }
+
+    public int getMaxPlantNutrition() {
+        return maxPlantNutrition;
+    }
+
+    public int getEnergyToReproduce() {
+        return energyToReproduce;
+    }
+
+    public int getEnergyLostInReproduction() {
+        return energyLostInReproduction;
+    }
+
+    public int getWaterAreasCount() {
+        return waterAreasCount;
+    }
+
+    public int getInflowOutflowSize() {
+        return inflowOutflowSize;
+    }
+
+    public int getInitialWaterAreaSize() {
+        return initialWaterAreaSize;
     }
 }
 

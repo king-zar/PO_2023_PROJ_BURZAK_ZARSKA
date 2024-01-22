@@ -11,6 +11,7 @@ public class WorldMap {
     protected final int mapHeight;
     protected final int mapWidth;
     private final int grassToGrowPerStep;
+    private final int maxGrassNutrition;
     private final UUID mapId;
 
     private static Multimap<Vector2d, Animal> animalsMap = HashMultimap.create();
@@ -24,14 +25,15 @@ public class WorldMap {
     }
 
     public WorldMap(int mapWidth, int mapHeight) {
-        this(mapWidth, mapHeight, (int) Math.round(mapWidth * mapHeight * 0.1)); // liczba roslinek randomowa
+        this(mapWidth, mapHeight, (int) Math.round(mapWidth * mapHeight * 0.1), 2); // liczba roslinek randomowa
     }
 
-    public WorldMap(int mapWidth, int mapHeight, int grassToGrowPerStep) {
+    public WorldMap(int mapWidth, int mapHeight, int grassToGrowPerStep, int maxGrassNutrition) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         this.grassToGrowPerStep = grassToGrowPerStep;
         this.mapId = UUID.randomUUID();
+        this.maxGrassNutrition = maxGrassNutrition;
     }
 
     public static void addAnimal(Vector2d position, Animal animal) {
@@ -41,7 +43,7 @@ public class WorldMap {
     public void addGrass(Vector2d position) {
         if (getGrassAt(position) == null) { // na danej pozycji moze byc tylko jedna trawa
             Random random = new Random();
-            int grassNutrition = random.nextInt(3) + 1; // Losowa liczba z zakresu 1-3
+            int grassNutrition = random.nextInt(this.maxGrassNutrition) + 1; // Losowa liczba z zakresu 1-maxGrassNutrition
             Grass grass = new Grass(position, grassNutrition);
             grassMap.put(position, grass);
         }
@@ -106,18 +108,21 @@ public class WorldMap {
         animal.loseEnergyAfterMove();
     }
 
-    public void handleAnimalReproductionAndEating(MutationVariant mutationVariant, int minMutations, int maxMutations) {
+    public void handleAnimalReproductionAndEating(MutationVariant mutationVariant, int minMutations, int maxMutations,
+                                                  int energyToReproduce, int energyLostInReproduction) {
         List<Animal> animals = getAllAnimals();
 
         for (Animal animal : animals) {
             if (animal.getEnergyLevel() > 0) {
-                resolveConflictAtPosition(animal.getPosition(), mutationVariant, minMutations, maxMutations); // po przesunieciu juz
+                resolveConflictAtPosition(animal.getPosition(), mutationVariant, minMutations, maxMutations,
+                        energyToReproduce, energyLostInReproduction); // po przesunieciu juz
             }
         }
     }
 
     private void resolveConflictAtPosition(Vector2d position, MutationVariant mutationVariant,
-                                           int minMutations, int maxMutations) {
+                                           int minMutations, int maxMutations,
+                                           int energyToReproduce, int energyLostInReproduction) {
         Collection<Animal> animalsAtPosition = getAnimalsAt(position);
         Grass grass = getGrassAt(position);
 
@@ -145,7 +150,8 @@ public class WorldMap {
 
             if (sortedAnimals.size() > 1) {
                 Animal second = sortedAnimals.get(1);
-                Optional<Animal> childOptional = winner.reproduce(second, mutationVariant, minMutations, maxMutations);
+                Optional<Animal> childOptional = winner.reproduce(second, mutationVariant, minMutations, maxMutations,
+                                                                        energyToReproduce, energyLostInReproduction);
 
                 if (childOptional.isPresent()) {
                     Animal child = childOptional.get();

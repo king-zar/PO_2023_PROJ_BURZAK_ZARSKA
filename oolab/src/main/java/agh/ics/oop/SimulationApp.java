@@ -26,20 +26,38 @@ public class SimulationApp extends Application {
     private int minMutations;
     private int maxMutations;
     private MapVariant mapVariant;
+    private int maxPlantNutrition;
+    private int initialAnimalEnergy;
+    private int genomeLength;
+    private int energyToReproduce;
+    private int energyLostInReproduction;
+    private int waterAreasCount;
+    private int initialWaterAreaSize;
+    private int inflowOutflowSize;
 
-    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps, int animalCount, int initialPlantCount,
-                         int plantToGrowPerStep, MutationVariant variant, int minMutations, int maxMutations,
-                         MapVariant mapVariant){
+    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps, int animalCount, int initialAnimalEnergy,
+                         int initialPlantCount, int plantToGrowPerStep, MutationVariant variant, int minMutations,
+                         int maxMutations, MapVariant mapVariant, int maxPlantNutrition, int genomeLength,
+                         int energyToReproduce, int energyLostInReproduction,
+                         int waterAreasCount, int initialWaterAreaSize, int inflowOutflowSize){
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         this.simulationSteps = simulationSteps;
         this.animalCount = animalCount;
+        this.initialAnimalEnergy = initialAnimalEnergy;
         this.initialPlantCount = initialPlantCount;
         this.plantToGrowPerStep = plantToGrowPerStep;
         this.mutationVariant = variant;
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
         this.mapVariant = mapVariant;
+        this.maxPlantNutrition = maxPlantNutrition;
+        this.genomeLength = genomeLength;
+        this.energyToReproduce = energyToReproduce;
+        this.energyLostInReproduction = energyLostInReproduction;
+        this.waterAreasCount = waterAreasCount;
+        this.initialWaterAreaSize = initialWaterAreaSize;
+        this.inflowOutflowSize = inflowOutflowSize;
     }
 
     @Override
@@ -53,8 +71,10 @@ public class SimulationApp extends Application {
 
             new Thread(() -> {
                 SimulationPresenter presenter = loader.getController();
-                SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount, plantToGrowPerStep,
-                        animalCount, 50, mutationVariant, minMutations, maxMutations, 32, mapVariant);
+                SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount,
+                        plantToGrowPerStep, energyToReproduce, energyLostInReproduction, animalCount, initialAnimalEnergy,
+                        mutationVariant, minMutations, maxMutations, genomeLength, mapVariant, maxPlantNutrition,
+                        waterAreasCount, initialWaterAreaSize, inflowOutflowSize);
 
                 Simulation simulation = new Simulation(config);
                 TidesOutflowsMap worldMap = simulation.getWorldMap();

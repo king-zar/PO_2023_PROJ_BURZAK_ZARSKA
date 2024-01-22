@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -44,6 +45,39 @@ public class StartWindowController {
     private ChoiceBox<String> mapVariantChoiceBox;
 
     @FXML
+    private TextField maxPlantNutrition;
+
+    @FXML
+    private TextField initialAnimalEnergy;
+
+    @FXML
+    private TextField genomeLength;
+
+    @FXML
+    private TextField energyToReproduce;
+
+    @FXML
+    private TextField energyLostInReproduction;
+
+    @FXML
+    private TextField waterAreasCount;
+
+    @FXML
+    private TextField initialWaterAreaSize;
+
+    @FXML
+    private TextField inflowOutflowSize;
+
+    @FXML
+    private Label waterAreasCountLabel;
+
+    @FXML
+    private Label initialWaterAreaSizeLabel;
+
+    @FXML
+    private Label inflowOutflowSizeLabel;
+
+    @FXML
     private BorderPane rootBorderPane; // Zmiana typu na BorderPane
 
     @FXML
@@ -53,6 +87,18 @@ public class StartWindowController {
 
         mapVariantChoiceBox.setItems(FXCollections.observableArrayList("EARTH_LIKE", "TIDES_OUTFLOWS"));
         mapVariantChoiceBox.setValue("EARTH_LIKE"); // domyslnie EARTH_LIKE
+
+        mapVariantChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            boolean isTidesOutflows = "TIDES_OUTFLOWS".equals(newValue);
+            // Toggle visibility of fields
+            waterAreasCount.setVisible(isTidesOutflows);
+            initialWaterAreaSize.setVisible(isTidesOutflows);
+            inflowOutflowSize.setVisible(isTidesOutflows);
+            // Toggle visibility of labels
+            waterAreasCountLabel.setVisible(isTidesOutflows);
+            initialWaterAreaSizeLabel.setVisible(isTidesOutflows);
+            inflowOutflowSizeLabel.setVisible(isTidesOutflows);
+        });
     }
 
     @FXML
@@ -64,12 +110,20 @@ public class StartWindowController {
                 Integer.parseInt(heightField.getText()),
                 Integer.parseInt(stepsField.getText()),
                 Integer.parseInt(animalCount.getText()),
+                Integer.parseInt(initialAnimalEnergy.getText()),
                 Integer.parseInt(initialPlantCount.getText()),
                 Integer.parseInt(plantToGrowPerStep.getText()),
                 MutationVariant.valueOf(mutationVariantChoiceBox.getValue()),
                 Integer.parseInt(minMutations.getText()),
                 Integer.parseInt(maxMutations.getText()),
-                MapVariant.valueOf(mapVariantChoiceBox.getValue())
+                MapVariant.valueOf(mapVariantChoiceBox.getValue()),
+                Integer.parseInt(maxPlantNutrition.getText()),
+                Integer.parseInt(genomeLength.getText()),
+                Integer.parseInt(energyToReproduce.getText()),
+                Integer.parseInt(energyLostInReproduction.getText()),
+                Integer.parseInt(waterAreasCount.getText()),
+                Integer.parseInt(initialWaterAreaSize.getText()),
+                Integer.parseInt(inflowOutflowSize.getText())
         );
 
         simulationApp.start(new Stage());

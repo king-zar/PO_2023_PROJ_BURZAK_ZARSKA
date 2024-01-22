@@ -2,6 +2,8 @@ package agh.ics.oop.model;
 
 import java.util.*;
 
+// trzeba chyba zmienic implementacje troche, zeby korzystac z jakiegos drzewa ktory bedzie mial najnizsze liscie jako brzegowe
+// bo teraz sie czasem tworza dziury w tych waterAreas
 public class TidesOutflowsMap extends WorldMap {
     private boolean tideTime;
     private int tidesCountdown = 0; // liczba kroków symulacji do kolejnych pływów/odpływów
@@ -11,8 +13,8 @@ public class TidesOutflowsMap extends WorldMap {
     private int currentWaterAreaId = 0; // zmienna pomocnicza
 
     public TidesOutflowsMap(int mapWidth, int mapHeight, int grassToGrowPerStep,
-                            int waterAreasCount, int initializeWaterSize) {
-        super(mapWidth, mapHeight, grassToGrowPerStep);
+                            int waterAreasCount, int initializeWaterSize, int maxPlantNutrition) {
+        super(mapWidth, mapHeight, grassToGrowPerStep, maxPlantNutrition);
         initializeWaterAreas(waterAreasCount, initializeWaterSize);
         tideTime = true;
     }
