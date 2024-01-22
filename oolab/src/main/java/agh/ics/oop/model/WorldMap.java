@@ -8,8 +8,8 @@ import com.google.common.collect.Multimap;
 import java.util.*;
 
 public class WorldMap {
-    private final int mapHeight;
-    private final int mapWidth;
+    protected final int mapHeight;
+    protected final int mapWidth;
     private final int grassToGrowPerStep;
     private final UUID mapId;
 
@@ -77,7 +77,7 @@ public class WorldMap {
         }
     }
 
-    private void performMove(Animal animal) {
+    protected void performMove(Animal animal) {
         Vector2d oldPosition = animal.getPosition();
         Vector2d newPosition = animal.intendMove();
 
@@ -87,11 +87,11 @@ public class WorldMap {
         }
     }
 
-    private boolean isPositionWithinBounds(Vector2d position) {
+    protected boolean isPositionWithinBounds(Vector2d position) {
         return position.getY() >= 0 && position.getY() < mapHeight;
     }
 
-    private Vector2d wrapPosition(Vector2d position) { // kula ziemska
+    protected Vector2d wrapPosition(Vector2d position) { // kula ziemska
         int wrappedX = position.getX() % mapWidth;
         if (wrappedX < 0) {
             wrappedX += mapWidth;
@@ -99,7 +99,7 @@ public class WorldMap {
         return new Vector2d(wrappedX, position.getY());
     }
 
-    private void moveAnimal(Vector2d oldPosition, Vector2d newPosition, Animal animal) {
+    protected void moveAnimal(Vector2d oldPosition, Vector2d newPosition, Animal animal) {
         removeAnimal(oldPosition, animal);
         addAnimal(newPosition, animal);
         animal.setPosition(newPosition);

@@ -77,6 +77,10 @@ public class Animal implements WorldElement {
         energyLevel += grass.getPlantNutrition();
     }
 
+    public void die() {
+        energyLevel = 0;
+    }
+
     public void loseEnergyAfterMove() {
         energyLevel -= 1;
     }

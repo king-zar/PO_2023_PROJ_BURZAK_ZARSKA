@@ -92,5 +92,9 @@ public class SimulationConfig {
     public int getPlantToGrowPerStep() {
         return plantToGrowPerStep;
     }
+
+    public MapVariant getMapVariant() {
+        return mapVariant;
+    }
 }
 

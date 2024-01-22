@@ -1,11 +1,13 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.model.variants.MapVariant;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 
 public class Simulation {
-    private WorldMap worldMap;
+    private TidesOutflowsMap worldMap;
     private SimulationConfig config;
 
     private static final double PREFERRED_AREA_RATIO = 0.2;
@@ -16,14 +18,18 @@ public class Simulation {
     public Simulation(SimulationConfig config) {
         this.config = config;
         this.consoleMapDisplay = new ConsoleMapDisplay();
-        this.worldMap = initializeWorldMap();
+        this.worldMap = initializeMap();
         this.worldMap.subscribe(consoleMapDisplay);
         initializeGrass();
         initializeAnimals();
     }
 
-    private WorldMap initializeWorldMap() {
-        return new WorldMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep());
+    private TidesOutflowsMap initializeMap() {
+        if (config.getMapVariant() == MapVariant.EARTH_LIKE) {
+            return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(), 0, 0);
+        } else {
+            return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(), 2, 4);
+        }
     }
 
     private void initializeGrass() {
@@ -90,6 +96,15 @@ public class Simulation {
 
     public void simulateTimeStep() {
         deleteDeadAnimals();
+
+//        if (config.getMapVariant() == MapVariant.TIDES_OUTFLOWS) {
+//            if (getWorldMap().getTideTime()) {
+//                worldMap.performTides();
+//            } else {
+//                worldMap.performOutflows();
+//            }
+//        }
+
         moveAnimals();
         handleAnimalReproductionAndEating();
         growGrass(worldMap.getGrassToGrowPerStep());
@@ -109,7 +124,7 @@ public class Simulation {
         worldMap.handleAnimalReproductionAndEating(config.getMutationVariant(), config.getMinMutations(), config.getMaxMutations());
     }
 
-    public WorldMap getWorldMap() {
+    public TidesOutflowsMap getWorldMap() {
         return worldMap;
     }
 }

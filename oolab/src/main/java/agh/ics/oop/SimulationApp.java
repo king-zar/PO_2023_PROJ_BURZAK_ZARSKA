@@ -1,5 +1,6 @@
 package agh.ics.oop;
 
+import agh.ics.oop.model.TidesOutflowsMap;
 import agh.ics.oop.model.variants.MapVariant;
 import agh.ics.oop.model.variants.MutationVariant;
 import agh.ics.oop.model.Simulation;
@@ -56,7 +57,7 @@ public class SimulationApp extends Application {
                         animalCount, 50, mutationVariant, minMutations, maxMutations, 32, mapVariant);
 
                 Simulation simulation = new Simulation(config);
-                WorldMap worldMap = simulation.getWorldMap();
+                TidesOutflowsMap worldMap = simulation.getWorldMap();
                 presenter.setWorldMap(worldMap);
                 presenter.setConfig(config);
 

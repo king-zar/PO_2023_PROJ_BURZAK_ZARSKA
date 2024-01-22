@@ -25,7 +25,7 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private GridPane mapGrid;
 
-    private WorldMap worldMap;
+    private TidesOutflowsMap worldMap;
     private SimulationConfig config;
 
     private boolean simulationRunning = true;
@@ -41,7 +41,7 @@ public class SimulationPresenter implements MapChangeListener {
         });
     }
 
-    public void setWorldMap(WorldMap worldMap) {
+    public void setWorldMap(TidesOutflowsMap worldMap) {
         this.worldMap = worldMap;
         this.worldMap.subscribe(this);
         drawMap();
@@ -133,8 +133,9 @@ public class SimulationPresenter implements MapChangeListener {
 
         Collection<Animal> animalsAtPosition = worldMap.getAnimalsAt(currentPosition);
         Grass grassAtPosition = worldMap.getGrassAt(currentPosition);
+        Water waterAtPosition = worldMap.getWaterAt(currentPosition);
 
-        Label label = createLabelForPosition(animalsAtPosition, grassAtPosition);
+        Label label = createLabelForPosition(animalsAtPosition, grassAtPosition, waterAtPosition);
 
         if (label != null) {
             GridPane.setHalignment(label, HPos.CENTER);
@@ -142,10 +143,8 @@ public class SimulationPresenter implements MapChangeListener {
         }
     }
 
-    private Label createLabelForPosition(Collection<Animal> animals, Grass grass) {
-        if (animals.isEmpty() && grass == null) {
-            return null;  // Brak zwierząt i trawy
-        } else if (!animals.isEmpty()) {
+    private Label createLabelForPosition(Collection<Animal> animals, Grass grass, Water water) {
+        if (!animals.isEmpty()) {
             if (animals.size() == 1) {
                 return createAnimalLabel(animals.iterator().next());  // Jedno zwierzę
             } else {
@@ -154,8 +153,12 @@ public class SimulationPresenter implements MapChangeListener {
                 Collections.shuffle(animalsList);
                 return createAnimalLabel(animalsList.get(0));
             }
-        } else {
+        } else if (water != null) {
+            return createWaterLabel(water);
+        } else if (grass != null) {
             return createGrassLabel(grass);  // Brak zwierząt, trawa obecna
+        } else {
+            return null;
         }
     }
 
@@ -174,6 +177,16 @@ public class SimulationPresenter implements MapChangeListener {
     private Label createGrassLabel(Grass grass) {
         Rectangle rectangle = new Rectangle(CELL_WIDTH, CELL_HEIGHT);
         rectangle.setFill(Color.GREEN);
+
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(rectangle);
+
+        return new Label("", stackPane);
+    }
+
+    private Label createWaterLabel(Water water) {
+        Rectangle rectangle = new Rectangle(CELL_WIDTH, CELL_HEIGHT);
+        rectangle.setFill(Color.BLUE);
 
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(rectangle);
