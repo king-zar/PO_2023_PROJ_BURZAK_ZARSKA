@@ -4,9 +4,7 @@ import java.util.*;
 
 public class TidesOutflowsMap extends WorldMap {
     private boolean tideTime;
-    private int tidesCountdown = 3; // liczba kroków symulacji do kolejnych pływów/odpływów
-    private static final int TIDES_INTERVAL = 3; // co ile kroków symulacji mają wystąpić pływy/odpływy
-
+    private int tidesCountdown = 0; // liczba kroków symulacji do kolejnych pływów/odpływów
 
     private Map<Vector2d, Water> waterAreas = new HashMap<>();
 
@@ -66,6 +64,32 @@ public class TidesOutflowsMap extends WorldMap {
         return availableWaterPositions;
     }
 
+    public void tideOrOutflow(int waterAmount) {
+        if (isTideTime()) {
+            if (tidesCountdown == 3) {
+                performTide(waterAmount);
+            } else if (tidesCountdown < 3) {
+                tidesCountdown += 1;
+            }
+
+        } else {
+            if (tidesCountdown == 0) {
+                performOutflow(waterAmount);
+            } else if (tidesCountdown > 0) {
+                tidesCountdown -= 1;
+            }
+        }
+    }
+
+    private void performTide (int waterAmount) {
+        addWaterInVicinity(waterAmount);
+        tideTime = false;
+    }
+
+    private void performOutflow (int waterAmount) {
+        // tu bedzie obsluga odplywu wywolana
+        tideTime = true;
+    }
 
     private void addWaterInVicinity(int waterAmount) {
         for (int i=0; i<=currentWaterAreaId; i++) {
@@ -109,7 +133,9 @@ public class TidesOutflowsMap extends WorldMap {
             freePositions = getFreePositionsAround(surroundingCheck);
         } while (freePositions.isEmpty());
 
-        return freePositions.get(randomIndex);
+        int randomFree = random.nextInt(freePositions.size());
+
+        return freePositions.get(randomFree);
     }
 
     private List<Vector2d> getFreePositionsAround(Vector2d centerPosition) {
@@ -125,7 +151,7 @@ public class TidesOutflowsMap extends WorldMap {
                 Vector2d newPosition = wrapPosition(centerPosition.add(new Vector2d(xOffset, yOffset)));
 
                 // Sprawdź, czy nowa pozycja jest wolna
-                if (!isInWaterArea(newPosition) && isPositionWithinBounds(newPosition)) {
+                if (isOutsideWaterArea(newPosition) && isPositionWithinBounds(newPosition)) {
                     freePositions.add(newPosition);
                 }
             }
@@ -142,7 +168,7 @@ public class TidesOutflowsMap extends WorldMap {
         if (isPositionWithinBounds(newPosition)) {
             newPosition = wrapPosition(newPosition);
 
-            if (!isInWaterArea(newPosition)) {
+            if (isOutsideWaterArea(newPosition)) {
                 moveAnimal(oldPosition, newPosition, animal);
             } else {
                 // zwierzę weszlo na obszar wodny, wywołaj jego metodę die()
@@ -152,8 +178,8 @@ public class TidesOutflowsMap extends WorldMap {
         }
     }
 
-    private boolean isInWaterArea(Vector2d position) {
-        return waterAreas.containsKey(position);
+    private boolean isOutsideWaterArea(Vector2d position) {
+        return !waterAreas.containsKey(position);
     }
 
     public Water getWaterAt(Vector2d position) {

@@ -96,15 +96,7 @@ public class Simulation {
 
     public void simulateTimeStep() {
         deleteDeadAnimals();
-
-//        if (config.getMapVariant() == MapVariant.TIDES_OUTFLOWS) {
-//            if (getWorldMap().getTideTime()) {
-//                worldMap.performTides();
-//            } else {
-//                worldMap.performOutflows();
-//            }
-//        }
-
+        tideOrOutflow();
         moveAnimals();
         handleAnimalReproductionAndEating();
         growGrass(worldMap.getGrassToGrowPerStep());
@@ -114,6 +106,10 @@ public class Simulation {
 
     private void deleteDeadAnimals() {
         worldMap.removeDeadAnimals();
+    }
+
+    private void tideOrOutflow() {
+        worldMap.tideOrOutflow(3);
     }
 
     private void moveAnimals() {
