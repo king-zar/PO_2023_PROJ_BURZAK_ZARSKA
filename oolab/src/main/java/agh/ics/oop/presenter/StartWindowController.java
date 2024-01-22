@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -69,15 +68,6 @@ public class StartWindowController {
     private TextField inflowOutflowSize;
 
     @FXML
-    private Label waterAreasCountLabel;
-
-    @FXML
-    private Label initialWaterAreaSizeLabel;
-
-    @FXML
-    private Label inflowOutflowSizeLabel;
-
-    @FXML
     private BorderPane rootBorderPane; // Zmiana typu na BorderPane
 
     @FXML
@@ -86,18 +76,25 @@ public class StartWindowController {
         mutationVariantChoiceBox.setValue("RANDOM"); // domyslnie RANDOM
 
         mapVariantChoiceBox.setItems(FXCollections.observableArrayList("EARTH_LIKE", "TIDES_OUTFLOWS"));
-        mapVariantChoiceBox.setValue("EARTH_LIKE"); // domyslnie EARTH_LIKE
 
         mapVariantChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             boolean isTidesOutflows = "TIDES_OUTFLOWS".equals(newValue);
-            // Toggle visibility of fields
-            waterAreasCount.setVisible(isTidesOutflows);
-            initialWaterAreaSize.setVisible(isTidesOutflows);
-            inflowOutflowSize.setVisible(isTidesOutflows);
-            // Toggle visibility of labels
-            waterAreasCountLabel.setVisible(isTidesOutflows);
-            initialWaterAreaSizeLabel.setVisible(isTidesOutflows);
-            inflowOutflowSizeLabel.setVisible(isTidesOutflows);
+            // Toggle editability of fields for EARTH_LIKE variant
+            waterAreasCount.setEditable(isTidesOutflows);
+            initialWaterAreaSize.setEditable(isTidesOutflows);
+            inflowOutflowSize.setEditable(isTidesOutflows);
+
+            // Set default values for EARTH_LIKE variant
+            if (!isTidesOutflows) {
+                waterAreasCount.setText("0");
+                initialWaterAreaSize.setText("0");
+                inflowOutflowSize.setText("0");
+
+            } else {
+                waterAreasCount.setText("");
+                initialWaterAreaSize.setText("");
+                inflowOutflowSize.setText("");
+            }
         });
     }
 

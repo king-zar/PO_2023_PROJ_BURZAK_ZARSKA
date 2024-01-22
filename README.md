@@ -16,7 +16,7 @@
 - [ ] wielowątkowość
 - [ ] statystyki
 - [ ] skalowanie mapy do rozmiaru okienka
-- [ ] dodanie większej ilości konfiguracji dla użytkownika
+- [x] dodanie większej ilości konfiguracji dla użytkownika
 - [ ] testy jednostkowe
 - [ ] obsługa błędów
 - [x] dodanie losowego kierunku dla zwierzaka nowo narodzonego i rozpoczecie odczytywania genotypu w losowym miejscu

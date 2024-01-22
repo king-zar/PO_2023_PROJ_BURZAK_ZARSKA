@@ -33,10 +33,10 @@ public class Simulation {
     private TidesOutflowsMap initializeMap() {
         if (config.getMapVariant() == MapVariant.EARTH_LIKE) {
             return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(),
-                    config.getWaterAreasCount(), config.getInitialWaterAreaSize(), config.getMaxPlantNutrition());
+                    0, 0, config.getMaxPlantNutrition());
         } else {
             return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(),
-                    2, 4, config.getMaxPlantNutrition());
+                    config.getWaterAreasCount(), config.getInitialWaterAreaSize(), config.getMaxPlantNutrition());
         }
     }
 

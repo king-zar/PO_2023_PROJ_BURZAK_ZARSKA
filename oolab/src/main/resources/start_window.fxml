@@ -70,14 +70,14 @@
             <Label text="Map Variant:" GridPane.columnIndex="5" GridPane.rowIndex="5"/>
             <ChoiceBox fx:id="mapVariantChoiceBox" GridPane.columnIndex="6" GridPane.rowIndex="5"/>
 
-            <Label fx:id="waterAreasCountLabel" text="Number Of Water Areas:" GridPane.columnIndex="5" GridPane.rowIndex="6" visible="false"/>
-            <TextField fx:id="waterAreasCount" GridPane.columnIndex="6" GridPane.rowIndex="6" visible="false"/>
+            <Label text="Number Of Water Areas:" GridPane.columnIndex="5" GridPane.rowIndex="6"/>
+            <TextField fx:id="waterAreasCount" GridPane.columnIndex="6" GridPane.rowIndex="6"/>
 
-            <Label fx:id="initialWaterAreaSizeLabel" text="Initial Water Area Size:" GridPane.columnIndex="5" GridPane.rowIndex="7" visible="false"/>
-            <TextField fx:id="initialWaterAreaSize" GridPane.columnIndex="6" GridPane.rowIndex="7" visible="false"/>
+            <Label text="Initial Water Area Size:" GridPane.columnIndex="5" GridPane.rowIndex="7"/>
+            <TextField fx:id="initialWaterAreaSize" GridPane.columnIndex="6" GridPane.rowIndex="7"/>
 
-            <Label fx:id="inflowOutflowSizeLabel" text="Size of inflow/outflow:" GridPane.columnIndex="5" GridPane.rowIndex="8" visible="false"/>
-            <TextField fx:id="inflowOutflowSize" GridPane.columnIndex="6" GridPane.rowIndex="8" visible="false"/>
+            <Label text="Size of inflow/outflow:" GridPane.columnIndex="5" GridPane.rowIndex="8"/>
+            <TextField fx:id="inflowOutflowSize" GridPane.columnIndex="6" GridPane.rowIndex="8"/>
 
         </GridPane>
     </center>
