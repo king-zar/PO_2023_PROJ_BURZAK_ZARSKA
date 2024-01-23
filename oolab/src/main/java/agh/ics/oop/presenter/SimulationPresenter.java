@@ -132,7 +132,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     private Label createAnimalLabel(Animal animal) {
         Circle circle = new Circle(Math.min(getCellWidth(), getCellHeight()) / 2);
-        double energyPercentage = Math.min((animal.getEnergyLevel() * 1.0 / config.getInitialAnimalEnergy()), 1.0);
+        double energyPercentage = Math.min((animal.getEnergyLevel() * 1.0 / config.initialAnimalEnergy()), 1.0);
         Color color = Color.hsb(270, 1.0, energyPercentage);
         circle.setFill(color);
 
@@ -192,8 +192,8 @@ public class SimulationPresenter implements MapChangeListener {
         var baseWidth = 28;
         var baseHeight = 14;
 
-        var configWidth = config.getMapWidth();
-        var configHeight = config.getMapHeight();
+        var configWidth = config.mapWidth();
+        var configHeight = config.mapHeight();
 
         var width = 0;
         var height = 0;

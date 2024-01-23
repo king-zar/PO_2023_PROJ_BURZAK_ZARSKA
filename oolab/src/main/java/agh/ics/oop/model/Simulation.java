@@ -1,6 +1,5 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.model.variants.MapVariant;
 import agh.ics.oop.presenter.SimulationPresenter;
 
 import java.util.ArrayList;
@@ -31,20 +30,20 @@ public class Simulation {
     }
 
     private TidesOutflowsMap initializeMap() {
-        return new TidesOutflowsMap(config.getMapWidth(), config.getMapHeight(), config.getPlantToGrowPerStep(),
-                    config.getWaterAreasCount(), config.getInitialWaterAreaSize(), config.getMaxPlantNutrition());
+        return new TidesOutflowsMap(config.mapWidth(), config.mapHeight(), config.plantToGrowPerStep(),
+                    config.waterAreasCount(), config.initialWaterAreaSize(), config.maxPlantNutrition());
     }
 
     private void initializeGrass() {
-        growGrass(config.getInitialPlantCount());
+        growGrass(config.initialPlantCount());
     }
 
     private void growGrass(int grassToGrowPerStep) {
         Random random = new Random();
         int grassGrown = 0;
 
-        int preferredAreaHeight = (int) (config.getMapHeight() * PREFERRED_AREA_RATIO);
-        int preferredAreaYStart = (config.getMapHeight() - preferredAreaHeight) / 2;
+        int preferredAreaHeight = (int) (config.mapHeight() * PREFERRED_AREA_RATIO);
+        int preferredAreaYStart = (config.mapHeight() - preferredAreaHeight) / 2;
 
         List<Vector2d> availablePositionsWholeMap = worldMap.getAvailableGrassPositions(0, worldMap.getMapHeight());
         List<Vector2d> availablePrefferedPositions = worldMap.getAvailableGrassPositions(preferredAreaYStart, preferredAreaHeight);
@@ -80,16 +79,16 @@ public class Simulation {
     }
 
     private void initializeAnimals() {
-        for (int i = 0; i < config.getInitialAnimalCount(); i++) {
-            int x = (int) (Math.random() * config.getMapWidth());
-            int y = (int) (Math.random() * config.getMapHeight());
-            Animal animal = new Animal(new Vector2d(x, y), config.getInitialAnimalEnergy(), config.getGenomeLength());
+        for (int i = 0; i < config.initialAnimalCount(); i++) {
+            int x = (int) (Math.random() * config.mapWidth());
+            int y = (int) (Math.random() * config.mapHeight());
+            Animal animal = new Animal(new Vector2d(x, y), config.initialAnimalEnergy(), config.genomeLength());
             worldMap.addAnimal(new Vector2d(x, y), animal);
         }
     }
 
     public void runSimulation() {
-        for (int i = 0; i < config.getSimulationSteps(); i++) {
+        for (int i = 0; i < config.simulationSteps(); i++) {
             simulateTimeStep();
         }
     }
@@ -109,7 +108,7 @@ public class Simulation {
     }
 
     private void tideOrOutflow() {
-        worldMap.tideOrOutflow(config.getInflowOutflowSize());
+        worldMap.tideOrOutflow(config.inflowOutflowSize());
     }
 
     private void moveAnimals() {
@@ -117,8 +116,8 @@ public class Simulation {
     }
 
     private void handleAnimalReproductionAndEating() {
-        worldMap.handleAnimalReproductionAndEating(config.getMutationVariant(), config.getMinMutations(),
-                config.getMaxMutations(), config.getEnergyToReproduce(), config.getEnergyLostInReproduction());
+        worldMap.handleAnimalReproductionAndEating(config.mutationVariant(), config.minMutations(),
+                config.maxMutations(), config.energyToReproduce(), config.energyLostInReproduction());
     }
 
     public TidesOutflowsMap getWorldMap() {
