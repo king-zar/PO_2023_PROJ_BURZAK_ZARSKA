@@ -1,5 +1,6 @@
 package agh.ics.oop;
 
+import agh.ics.oop.presenter.StartWindowController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -30,6 +31,8 @@ public class StartWindow extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getClassLoader().getResource("start_window.fxml"));
             BorderPane root = loader.load();
+            StartWindowController controller = loader.getController();
+            controller.setStage(primaryStage);
 
             // referencje do pol tekstowych
             widthField = (TextField) loader.getNamespace().get("widthField");

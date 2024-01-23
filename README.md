@@ -15,7 +15,7 @@
 - [ ] poprawić warunki brzegowe dla odpływów związane z zawijaniem mapy na x
 - [ ] wielowątkowość
 - [ ] statystyki
-- [ ] skalowanie mapy do rozmiaru okienka
+- [x] skalowanie mapy do rozmiaru okienka
 - [x] dodanie większej ilości konfiguracji dla użytkownika
 - [ ] testy jednostkowe
 - [ ] obsługa błędów
@@ -23,6 +23,6 @@
 - [x] dodanie kolejności rozwiązywania konfliktów
 - [x] zatrzymanie pojawiania się roślinek jak nie ma już na nie miejsca na mapie
 - [x] sprawdzić, czy suma energii organizmów na danym polu po rozmnażaniu jest taka sama jak przed rozmnażaniem
-- [ ] zapisywanie konfiguracji do pliku
-- [ ] wczytywanie konfiguracji z pliku
-- [ ] zatrzymanie symulacji, jeśli nie ma już żywych zwierząt
+- [x] zapisywanie konfiguracji do pliku
+- [x] wczytywanie konfiguracji z pliku
+- [x] zatrzymanie symulacji, jeśli nie ma już żywych zwierząt
