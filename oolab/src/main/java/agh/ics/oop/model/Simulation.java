@@ -124,4 +124,8 @@ public class Simulation {
     public TidesOutflowsMap getWorldMap() {
         return worldMap;
     }
+
+    public boolean anyAlive() {
+        return worldMap.anyAlive();
+    }
 }

@@ -1,11 +1,8 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.TidesOutflowsMap;
+import agh.ics.oop.model.*;
 import agh.ics.oop.model.variants.MapVariant;
 import agh.ics.oop.model.variants.MutationVariant;
-import agh.ics.oop.model.Simulation;
-import agh.ics.oop.model.SimulationConfig;
-import agh.ics.oop.model.WorldMap;
 import agh.ics.oop.presenter.SimulationPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -35,29 +32,25 @@ public class SimulationApp extends Application {
     private int initialWaterAreaSize;
     private int inflowOutflowSize;
 
-    public SimulationApp(int mapWidth, int mapHeight, int simulationSteps, int animalCount, int initialAnimalEnergy,
-                         int initialPlantCount, int plantToGrowPerStep, MutationVariant variant, int minMutations,
-                         int maxMutations, MapVariant mapVariant, int maxPlantNutrition, int genomeLength,
-                         int energyToReproduce, int energyLostInReproduction,
-                         int waterAreasCount, int initialWaterAreaSize, int inflowOutflowSize){
-        this.mapWidth = mapWidth;
-        this.mapHeight = mapHeight;
-        this.simulationSteps = simulationSteps;
-        this.animalCount = animalCount;
-        this.initialAnimalEnergy = initialAnimalEnergy;
-        this.initialPlantCount = initialPlantCount;
-        this.plantToGrowPerStep = plantToGrowPerStep;
-        this.mutationVariant = variant;
-        this.minMutations = minMutations;
-        this.maxMutations = maxMutations;
-        this.mapVariant = mapVariant;
-        this.maxPlantNutrition = maxPlantNutrition;
-        this.genomeLength = genomeLength;
-        this.energyToReproduce = energyToReproduce;
-        this.energyLostInReproduction = energyLostInReproduction;
-        this.waterAreasCount = waterAreasCount;
-        this.initialWaterAreaSize = initialWaterAreaSize;
-        this.inflowOutflowSize = inflowOutflowSize;
+    public SimulationApp(Configuration configuration){
+        this.mapWidth = configuration.width;
+        this.mapHeight = configuration.height;
+        this.simulationSteps = configuration.simulationSteps;
+        this.animalCount = configuration.initialAnimalCount;
+        this.initialAnimalEnergy = configuration.initialAnimalEnergy;
+        this.initialPlantCount = configuration.initialPlantCount;
+        this.plantToGrowPerStep = configuration.plantToGrowPerStep;
+        this.mutationVariant = MutationVariant.valueOf(configuration.mutationVariant);
+        this.minMutations = configuration.minMutations;
+        this.maxMutations = configuration.maxMutations;
+        this.mapVariant = MapVariant.valueOf(configuration.mapVariant);
+        this.maxPlantNutrition =  configuration.maxPlantNutrition;
+        this.genomeLength = configuration.genomeLength;
+        this.energyToReproduce = configuration.energyToReproduce;
+        this.energyLostInReproduction = configuration.energyLostInReproduction;
+        this.waterAreasCount = configuration.waterAreasCount;
+        this.initialWaterAreaSize = configuration.initialWaterAreaSize;
+        this.inflowOutflowSize = configuration.inflowOutflowSize;
     }
 
     @Override
@@ -82,7 +75,7 @@ public class SimulationApp extends Application {
                 presenter.setConfig(config);
 
                 for (int i=0; i<simulationSteps; i++) {
-                    if (presenter.isSimulationRunning()) {
+                    if (presenter.isSimulationRunning() && simulation.anyAlive()) {
                         simulation.simulateTimeStep();
                         presenter.mapChanged(worldMap, "Zmiana po kroku symulacji");
                     }

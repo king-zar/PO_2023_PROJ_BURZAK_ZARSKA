@@ -247,4 +247,8 @@ public class WorldMap {
     public List<Animal> getAllAnimals() {
         return new ArrayList<>(animalsMap.values());
     }
+
+    public boolean anyAlive() {
+        return !animalsMap.isEmpty();
+    }
 }

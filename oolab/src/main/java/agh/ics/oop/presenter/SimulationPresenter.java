@@ -76,14 +76,14 @@ public class SimulationPresenter implements MapChangeListener {
 
     private void addColumns(int columns) {
         for (int col = 0; col < columns; col++) {
-            ColumnConstraints column = new ColumnConstraints(CELL_WIDTH);
+            ColumnConstraints column = new ColumnConstraints(getCellWidth());
             mapGrid.getColumnConstraints().add(column);
         }
     }
 
     private void addRows(int rows) {
         for (int row = 0; row < rows; row++) {
-            RowConstraints rowConstraint = new RowConstraints(CELL_HEIGHT);
+            RowConstraints rowConstraint = new RowConstraints(getCellHeight());
             mapGrid.getRowConstraints().add(rowConstraint);
         }
     }
@@ -131,7 +131,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Label createAnimalLabel(Animal animal) {
-        Circle circle = new Circle(Math.min(CELL_WIDTH, CELL_HEIGHT) / 2);
+        Circle circle = new Circle(Math.min(getCellWidth(), getCellHeight()) / 2);
         double energyPercentage = Math.min((animal.getEnergyLevel() * 1.0 / config.getInitialAnimalEnergy()), 1.0);
         Color color = Color.hsb(270, 1.0, energyPercentage);
         circle.setFill(color);
@@ -143,7 +143,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Label createGrassLabel(Grass grass) {
-        Rectangle rectangle = new Rectangle(CELL_WIDTH, CELL_HEIGHT);
+        Rectangle rectangle = new Rectangle(getCellWidth(), getCellHeight());
         rectangle.setFill(Color.GREEN);
 
         StackPane stackPane = new StackPane();
@@ -153,7 +153,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private Label createWaterLabel(Water water) {
-        Rectangle rectangle = new Rectangle(CELL_WIDTH, CELL_HEIGHT);
+        Rectangle rectangle = new Rectangle(getCellWidth(), getCellHeight());
         rectangle.setFill(Color.BLUE);
 
         StackPane stackPane = new StackPane();
@@ -178,5 +178,40 @@ public class SimulationPresenter implements MapChangeListener {
             infoLabel.setText("Simulation paused.");
             simulationRunning = false;
         }
+    }
+
+    private double getCellWidth(){
+        return setScale(CELL_WIDTH);
+    }
+
+    private double getCellHeight(){
+        return setScale(CELL_HEIGHT);
+    }
+
+    private double setScale(double value){
+        var baseWidth = 28;
+        var baseHeight = 14;
+
+        var configWidth = config.getMapWidth();
+        var configHeight = config.getMapHeight();
+
+        var width = 0;
+        var height = 0;
+
+        var counter = -1;
+
+        while (width < configWidth || height < configHeight) {
+
+            if (counter == 0){
+                width += baseWidth;
+                height += baseHeight;
+            } else {
+                width += (int) (width * Math.pow(2, counter - 1));
+                height += (int) (height * Math.pow(2, counter - 1));
+            }
+            counter++;
+        }
+
+        return value / Math.pow(2, counter);
     }
 }
