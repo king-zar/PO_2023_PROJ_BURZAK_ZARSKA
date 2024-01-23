@@ -33,10 +33,29 @@ public class SimulationConfig {
 
     // konstruktory, gettery, settery
 
-    public SimulationConfig(int mapWidth, int mapHeight, int simulationSteps, int initialPlantCount, int plantToGrowPerStep,
-                            int initialAnimalCount, int initialAnimalEnergy, int energyToReproduce, int energyLostInReproduction,
-                            MutationVariant mutationVariant, int minMutations, int maxMutations,
-                            int genomeLength, MapVariant mapVariant, int maxPlantNutrition,
+//    Integer.parseInt(widthField.getText()),
+//            Integer.parseInt(heightField.getText()),
+//            Integer.parseInt(stepsField.getText()),
+//            Integer.parseInt(animalCount.getText()),
+//            Integer.parseInt(initialAnimalEnergy.getText()),
+//            Integer.parseInt(initialPlantCount.getText()),
+//            Integer.parseInt(plantToGrowPerStep.getText()),
+//            MutationVariant.valueOf(mutationVariantChoiceBox.getValue()),
+//            Integer.parseInt(minMutations.getText()),
+//            Integer.parseInt(maxMutations.getText()),
+//            MapVariant.valueOf(mapVariantChoiceBox.getValue()),
+//            Integer.parseInt(maxPlantNutrition.getText()),
+//            Integer.parseInt(genomeLength.getText()),
+//            Integer.parseInt(energyToReproduce.getText()),
+//            Integer.parseInt(energyLostInReproduction.getText()),
+//            Integer.parseInt(waterAreasCount.getText()),
+//            Integer.parseInt(initialWaterAreaSize.getText()),
+//            Integer.parseInt(inflowOutflowSize.getText())
+
+    public SimulationConfig(int mapWidth, int mapHeight, int simulationSteps, int initialAnimalCount, int initialAnimalEnergy,
+                            int initialPlantCount, int plantToGrowPerStep, MutationVariant mutationVariant,  int minMutations,
+                            int maxMutations, MapVariant mapVariant, int maxPlantNutrition, int genomeLength,
+                            int energyToReproduce, int energyLostInReproduction,
                             int waterAreasCount, int initialWaterAreaSize, int inflowOutflowSize) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;

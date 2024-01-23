@@ -71,9 +71,9 @@ public class SimulationApp extends Application {
 
             new Thread(() -> {
                 SimulationPresenter presenter = loader.getController();
-                SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, initialPlantCount,
-                        plantToGrowPerStep, energyToReproduce, energyLostInReproduction, animalCount, initialAnimalEnergy,
-                        mutationVariant, minMutations, maxMutations, genomeLength, mapVariant, maxPlantNutrition,
+                SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, animalCount,
+                        initialAnimalEnergy, initialPlantCount, plantToGrowPerStep, mutationVariant,  minMutations,
+                        maxMutations, mapVariant, maxPlantNutrition, genomeLength, energyToReproduce, energyLostInReproduction,
                         waterAreasCount, initialWaterAreaSize, inflowOutflowSize);
 
                 Simulation simulation = new Simulation(config);
