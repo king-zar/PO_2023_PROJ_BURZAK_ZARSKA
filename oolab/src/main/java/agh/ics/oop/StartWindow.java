@@ -48,6 +48,7 @@ public class StartWindow extends Application {
             Scene scene = new Scene(root, root.getMinWidth(), root.getMinHeight());
             primaryStage.setScene(scene);
             primaryStage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
