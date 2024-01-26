@@ -110,7 +110,7 @@ public class TidesOutflowsMap extends WorldMap {
         tideTime = true;
     }
 
-    private void addWaterInVicinity(int waterAmount) {
+    void addWaterInVicinity(int waterAmount) {
         for (int i=0; i<=currentWaterAreaId; i++) {
             List<Vector2d> waterAreaPositions = getWaterPositionsByAreaId(i);
 

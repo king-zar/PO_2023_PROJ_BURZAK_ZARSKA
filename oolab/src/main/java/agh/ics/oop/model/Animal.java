@@ -111,7 +111,7 @@ public class Animal implements WorldElement {
         partner.energyLevel -= energyLostInReproduction;
 
         this.childsNumber += 1;
-        this.childsNumber += 1;
+        partner.childsNumber += 1;
 
         int totalEnergyBeforeReproduction = this.getEnergyLevel() + partner.getEnergyLevel();
         int thisGenesContribution = (this.getEnergyLevel() * genes.size()) / totalEnergyBeforeReproduction;
