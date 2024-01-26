@@ -125,9 +125,8 @@ public class StartWindowController {
             Configuration configuration = getConfiguration();
             SimulationApp simulationApp = new SimulationApp(configuration);
 
-            engine.addSimulation(simulationApp);
+            engine.runAsyncInThreadPool(simulationApp);
 
-            engine.runAsyncInThreadPool();
         } catch (NumberFormatException e) {
             displayErrorDialog("Invalid parameter", "Please enter valid numeric parameters.");
         }

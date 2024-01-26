@@ -10,25 +10,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine {
-    private final List<SimulationApp> simulations;
     private final ExecutorService executorService;
-
     public SimulationEngine() {
-        this.simulations = new ArrayList<>();
         this.executorService = Executors.newFixedThreadPool(4);
     }
 
-    public void addSimulation(SimulationApp simulation) {
-        simulations.add(simulation);
-    }
-    public void runAsyncInThreadPool() {
-        for (SimulationApp simulation : simulations) {
-            executorService.submit(() -> {
-                Platform.runLater(() -> {
-                    simulation.start(new Stage());
-                });
+    public void runAsyncInThreadPool(SimulationApp simulation) {
+        executorService.submit(() -> {
+            Platform.runLater(() -> {
+                simulation.start(new Stage());
             });
-        }
+        });
     }
 
     public void awaitSimulationsEnd() {

@@ -10,14 +10,15 @@
 <?import javafx.scene.layout.Region?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="650.0" minWidth="850.0"
+            minHeight="500.0" minWidth="850.0"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter">
 
     <center>
         <VBox alignment="CENTER" spacing="10">
             <Label fx:id="infoLabel" text="All animals will be living here!" textAlignment="CENTER"/>
 
-            <GridPane fx:id="mapGrid" gridLinesVisible="true" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-width: 1px; -fx-border-radius: 5px; -fx-padding: 10px; -fx-max-width: 800px; -fx-max-height: 400px; -fx-alignment: center;"/>
+            <GridPane fx:id="mapGrid" gridLinesVisible="true" style="-fx-background-color: #ffffff; -fx-border-color: #cccccc; -fx-border-width: 1px;
+                        -fx-border-radius: 5px; -fx-padding: 10px; -fx-max-width: 800px; -fx-max-height: 400px; -fx-alignment: center;"/>
             <!-- narazie nie dziala gridLines i nie wiem co z tym zrobic -->
         </VBox>
     </center>
