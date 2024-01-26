@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="agh.ics.oop.presenter.StatisticsPresenter"
+      fx:id="statisticsVBox"
+      alignment="CENTER"
+      spacing="10"
+      style="-fx-padding: 10; -fx-margin-left: 10;">
+    <Label text="Statistics:" style="-fx-font-weight: bold;" />
+    <Label fx:id="totalAnimalsLabel" text="Total Animals: 0" />
+    <Label fx:id="totalPlantsLabel" text="Total Plants: 0" />
+    <Label fx:id="totalWatersLabel" text="Total Waters: 0" />
+    <Label fx:id="freeFieldsLabel" text="Free Fields: 0" />
+    <Label fx:id="mostCommonGenotypeLabel" text="Most Common Genotype: N/A" />
+    <Label fx:id="averageEnergyLabel" text="Average Energy: 0" />
+    <Label fx:id="averageLifeSpanLabel" text="Average Lifespan: 0" />
+    <Label fx:id="averageChildrenLabel" text="Average Children: 0" />
+    <Button text="Save Last Step statistics" onAction="#onSaveLastStepStatistics"/>
+</VBox>
+
+

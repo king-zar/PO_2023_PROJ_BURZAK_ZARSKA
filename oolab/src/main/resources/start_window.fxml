@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane minHeight="550.0" minWidth="700.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.ics.oop.presenter.StartWindowController">
+
+    <top>
+        <StackPane alignment="CENTER">
+            <Label style="-fx-font-size: 18px;" text="Simulation Setup" />
+        </StackPane>
+    </top>
+
+    <center>
+        <GridPane alignment="CENTER" hgap="10" vgap="20">
+            <Label text="Width:" />
+            <TextField fx:id="widthField" GridPane.columnIndex="1" />
+
+            <Label text="Height:" GridPane.rowIndex="1" />
+            <TextField fx:id="heightField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="Simulation Steps:" GridPane.rowIndex="2" />
+            <TextField fx:id="stepsField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <Label text="Initial Plant Count:" GridPane.rowIndex="3" />
+            <TextField fx:id="initialPlantCount" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+            <Label text="Plant To Grow Per Step:" GridPane.rowIndex="4" />
+            <TextField fx:id="plantToGrowPerStep" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <Label text="Max Plant Nutrition:" GridPane.rowIndex="5" />
+            <TextField fx:id="maxPlantNutrition" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+            <Label text="Min Mutations:" GridPane.rowIndex="6" />
+            <TextField fx:id="minMutations" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+
+            <Label text="Max Mutations:" GridPane.rowIndex="7" />
+            <TextField fx:id="maxMutations" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+
+            <Label text="Mutation Variant:" GridPane.rowIndex="8" />
+            <ChoiceBox fx:id="mutationVariantChoiceBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+
+
+            <!-- trzy kolumny puste, aby zwiekszyc przestrzen miedzy widzianymi kolumnami -->
+
+            <Label text="Animal Count:" GridPane.columnIndex="5" />
+            <TextField fx:id="animalCount" GridPane.columnIndex="6" />
+
+            <Label text="Initial Animal Energy:" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <TextField fx:id="initialAnimalEnergy" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+
+            <Label text="Genome Length:" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+            <TextField fx:id="genomeLength" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+
+            <Label text="Energy Level To Reproduce:" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+            <TextField fx:id="energyToReproduce" GridPane.columnIndex="6" GridPane.rowIndex="3" />
+
+            <Label text="Energy Lost In Reproduction:" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+            <TextField fx:id="energyLostInReproduction" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+
+            <Label text="Map Variant:" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+            <ChoiceBox fx:id="mapVariantChoiceBox" GridPane.columnIndex="6" GridPane.rowIndex="5" />
+
+            <Label text="Number Of Water Areas:" GridPane.columnIndex="5" GridPane.rowIndex="6" />
+            <TextField fx:id="waterAreasCount" GridPane.columnIndex="6" GridPane.rowIndex="6" />
+
+            <Label text="Initial Water Area Size:" GridPane.columnIndex="5" GridPane.rowIndex="7" />
+            <TextField fx:id="initialWaterAreaSize" GridPane.columnIndex="6" GridPane.rowIndex="7" />
+
+            <Label text="Size of inflow/outflow:" GridPane.columnIndex="5" GridPane.rowIndex="8" />
+            <TextField fx:id="inflowOutflowSize" GridPane.columnIndex="6" GridPane.rowIndex="8" />
+        </GridPane>
+    </center>
+
+    <bottom>
+        <StackPane alignment="BOTTOM_CENTER">
+         <VBox alignment="BOTTOM_CENTER" prefHeight="1.0" prefWidth="700.0">
+            <children>
+                <HBox alignment="CENTER">
+                  <Button onAction="#startSimulation" text="Start" />
+                </HBox>
+                <HBox/>
+                <HBox alignment="CENTER">
+                <Label text="Do you want to save stats?:" GridPane.rowIndex="8" />
+                <ChoiceBox fx:id="saveStatsChoiceBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                </HBox>
+               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <children>
+                      <Button onAction="#loadConfiguration" text="Load configuration" />
+                     <Button layoutX="252.0" layoutY="83.0" onAction="#saveConfiguration" text="Save configuration" />
+                  </children>
+               </HBox>
+            </children>
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+         </VBox>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+        </StackPane>
+    </bottom>
+</BorderPane>
