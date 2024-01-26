@@ -13,7 +13,6 @@ public class WorldMap {
     private final int grassToGrowPerStep;
     private final int maxGrassNutrition;
     private final UUID mapId;
-
     private static Multimap<Vector2d, Animal> animalsMap = HashMultimap.create();
     private static Map<Vector2d, Grass> grassMap = new HashMap<>();
 
@@ -63,6 +62,7 @@ public class WorldMap {
         for (Animal animal : animalsMap.values()) {
             if (animal.getEnergyLevel() <= 0) {
                 deadAnimals.add(animal);
+                Statistics.getInstance().registerAnimalDeath(animal);
             }
         }
 

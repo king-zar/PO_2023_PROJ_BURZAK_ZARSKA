@@ -4,10 +4,12 @@ import agh.ics.oop.model.*;
 import agh.ics.oop.model.variants.MapVariant;
 import agh.ics.oop.model.variants.MutationVariant;
 import agh.ics.oop.presenter.SimulationPresenter;
+import agh.ics.oop.presenter.StatisticsPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -62,6 +64,20 @@ public class SimulationApp extends Application {
 
             configureStage(primaryStage, viewRoot);
 
+            FXMLLoader loaderStatistics = new FXMLLoader();
+            loaderStatistics.setLocation(getClass().getClassLoader().getResource("StatisticsView.fxml"));
+            VBox statisticsView = loaderStatistics.load(); // Załaduj widok statystyk
+
+            StatisticsPresenter statisticsPresenter = loaderStatistics.getController();
+            if (statisticsPresenter == null) {
+                throw new IllegalStateException("StatisticsPresenter is null!");
+            }
+
+            statisticsPresenter.initialize();
+
+            viewRoot.setRight(statisticsView);
+
+
             new Thread(() -> {
                 SimulationPresenter presenter = loader.getController();
                 SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, animalCount,
@@ -74,10 +90,13 @@ public class SimulationApp extends Application {
                 presenter.setWorldMap(worldMap);
                 presenter.setConfig(config);
 
+                //StatisticsPresenter statisticsPresenter = loaderStatistics.getController();
+
                 for (int i=0; i<simulationSteps; i++) {
                     if (presenter.isSimulationRunning() && simulation.anyAlive()) {
                         simulation.simulateTimeStep();
                         presenter.mapChanged(worldMap, "Zmiana po kroku symulacji");
+                        statisticsPresenter.initialize();
                     }
                     try {
                         Thread.sleep(500); // Dostosuj czas opóźnienia, jeśli potrzebujesz

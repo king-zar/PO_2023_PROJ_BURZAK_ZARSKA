@@ -100,6 +100,8 @@ public class Simulation {
         handleAnimalReproductionAndEating();
         growGrass(worldMap.getGrassToGrowPerStep());
 
+        Statistics.getInstance().update(worldMap);
+
         worldMap.mapChanged("Zmiana po kroku symulacji");
     }
 
