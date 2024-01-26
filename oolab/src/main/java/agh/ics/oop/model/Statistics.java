@@ -45,7 +45,7 @@ public class Statistics {
     public void initializeCsv() throws IOException {
         String statisticsDirectory = "Statistics";
         Path projectPath = Paths.get(System.getProperty("user.dir"));
-        String baseCsvFileName = "simulation_stats";
+        String baseCsvFileName = "simulation_stats" + worldMap.getMapId();
         String csvExtension = ".csv";
 
         Path statisticsFolderPath = Paths.get(System.getProperty("user.dir"), statisticsDirectory);
