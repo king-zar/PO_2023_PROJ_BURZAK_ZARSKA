@@ -1,6 +1,13 @@
 package agh.ics.oop.model;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Statistics {
     private TidesOutflowsMap worldMap;
@@ -24,6 +31,8 @@ public class Statistics {
         this.worldMap = worldMap;
     }
 
+    Path csvPath;
+
     public void update() {
         setUniquePositions();
         setFreeFields();
@@ -31,6 +40,56 @@ public class Statistics {
         updateAverageEnergy();
         registerAnimalDeath();
         updateAverageChildren();
+    }
+
+    public void initializeCsv() throws IOException {
+        String statisticsDirectory = "Statistics";
+        Path projectPath = Paths.get(System.getProperty("user.dir"));
+        String baseCsvFileName = "simulation_stats";
+        String csvExtension = ".csv";
+
+        Path statisticsFolderPath = Paths.get(System.getProperty("user.dir"), statisticsDirectory);
+        if (!Files.exists(statisticsFolderPath)) {
+            Files.createDirectories(statisticsFolderPath);
+        }
+
+        String csvFileName = baseCsvFileName + csvExtension;
+        csvPath = statisticsFolderPath.resolve(csvFileName);
+        int fileIndex = 1;
+
+        while (Files.exists(csvPath)) {
+            csvFileName = baseCsvFileName + "_" + fileIndex++ + csvExtension;
+            csvPath = statisticsFolderPath.resolve(csvFileName);
+        }
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile(), true))) {
+            writer.println("Step,Total Animals,Total Plants,Total Waters,Free Fields,Most Common Genotype,Average Energy,Average LifeSpan,Average Children");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void appendStatisticsToCsv(int step) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile(), true))) {
+            String mostCommonGenotype = getMostCommonGenotype() != null
+                    ? getMostCommonGenotype().stream().map(Object::toString).collect(Collectors.joining(" "))
+                    : "None";
+            String dataRow = String.join(",",
+                    Integer.toString(step),
+                    Integer.toString(totalAnimals),
+                    Integer.toString(totalPlants),
+                    Integer.toString(totalWaters),
+                    Integer.toString(freeFields),
+                    "\"" + mostCommonGenotype + "\"",
+                    Double.toString(averageEnergy),
+                    Double.toString(averageLifeSpan),
+                    Double.toString(averageChildren)
+            );
+
+            writer.println(dataRow);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setUniquePositions() {

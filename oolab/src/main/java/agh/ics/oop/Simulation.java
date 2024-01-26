@@ -102,17 +102,18 @@ public class Simulation {
 
     public void runSimulation() {
         for (int i = 0; i < config.simulationSteps(); i++) {
-            simulateTimeStep();
+            simulateTimeStep(i);
         }
     }
 
-    public void simulateTimeStep() {
+    public void simulateTimeStep(int step) {
         deleteDeadAnimals();
         tideOrOutflow();
         moveAnimals();
         handleAnimalReproductionAndEating();
         growGrass(worldMap.getGrassToGrowPerStep());
         statistics.update();
+        statistics.appendStatisticsToCsv(step);
 
         worldMap.mapChanged("Zmiana po kroku symulacji");
     }
