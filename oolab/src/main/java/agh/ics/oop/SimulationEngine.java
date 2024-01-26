@@ -8,37 +8,39 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-public class SimulationEngine {
-    private final Object monitor = new Object();
-    private final List<SimulationApp> simulations;
-    private final List<Thread> threads;
 
-    public SimulationEngine(List<SimulationApp> simulations) {
-        this.simulations = simulations;
-        this.threads = new ArrayList<>();
+public class SimulationEngine {
+    private final List<SimulationApp> simulations;
+    private final ExecutorService executorService;
+
+    public SimulationEngine() {
+        this.simulations = new ArrayList<>();
+        this.executorService = Executors.newFixedThreadPool(4);
     }
 
-    public void runAsync() {
+    public void addSimulation(SimulationApp simulation) {
+        simulations.add(simulation);
+    }
+    public void runAsyncInThreadPool() {
         for (SimulationApp simulation : simulations) {
-            Thread simulationThread = new Thread(() -> {
+            executorService.submit(() -> {
                 Platform.runLater(() -> {
                     simulation.start(new Stage());
                 });
             });
-            threads.add(simulationThread);
-
-            simulationThread.start();
         }
     }
 
     public void awaitSimulationsEnd() {
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                System.err.println("Error joining thread: " + e.getMessage());
-                Thread.currentThread().interrupt();
+        executorService.shutdown();
+
+        try {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
             }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+            System.err.println("Error awaiting termination: " + e.getMessage());
         }
     }
 }

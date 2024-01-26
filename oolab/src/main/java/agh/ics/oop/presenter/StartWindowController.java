@@ -81,7 +81,7 @@ public class StartWindowController {
 
     private Stage primaryStage;
 
-    private SimulationEngine engine;
+    private SimulationEngine engine = new SimulationEngine();
 
     @FXML
     private void initialize() {
@@ -117,11 +117,9 @@ public class StartWindowController {
         Configuration configuration = getConfiguration();
         SimulationApp simulationApp = new SimulationApp(configuration);
 
-        List<SimulationApp> simulations = new ArrayList<>();
-        simulations.add(simulationApp);
+        engine.addSimulation(simulationApp);
 
-        engine = new SimulationEngine(simulations);
-        engine.runAsync();
+        engine.runAsyncInThreadPool();
     }
 
     @FXML

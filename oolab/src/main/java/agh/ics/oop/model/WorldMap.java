@@ -13,8 +13,8 @@ public class WorldMap {
     private final int grassToGrowPerStep;
     private final int maxGrassNutrition;
     private final UUID mapId;
-    private static Multimap<Vector2d, Animal> animalsMap = HashMultimap.create();
-    private static Map<Vector2d, Grass> grassMap = new HashMap<>();
+    private Multimap<Vector2d, Animal> animalsMap = HashMultimap.create();
+    private Map<Vector2d, Grass> grassMap = new HashMap<>();
 
     private List<MapChangeListener> observers = new ArrayList<>();
     private List<Animal> deadAnimals = new ArrayList<>();
@@ -36,7 +36,7 @@ public class WorldMap {
         this.maxGrassNutrition = maxGrassNutrition;
     }
 
-    public static void addAnimal(Vector2d position, Animal animal) {
+    public void addAnimal(Vector2d position, Animal animal) {
         animalsMap.put(position, animal);
     }
 
