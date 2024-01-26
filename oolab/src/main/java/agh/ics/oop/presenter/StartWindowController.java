@@ -123,7 +123,7 @@ public class StartWindowController {
         try {
             System.out.println("Start Simulation clicked!");
             Configuration configuration = getConfiguration();
-            SimulationApp simulationApp = new SimulationApp(configuration);
+            SimulationApp simulationApp = new SimulationApp(configuration, getFlagForFileSaving());
 
             engine.runAsyncInThreadPool(simulationApp);
 
@@ -187,6 +187,14 @@ public class StartWindowController {
         );
 
         return config;
+    }
+
+    private boolean getFlagForFileSaving() {
+        if (saveStatsChoiceBox.getValue().equals("NO")) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @FXML

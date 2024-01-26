@@ -21,6 +21,8 @@ public class Simulation {
     private SimulationPresenter presenter;
     private StatisticsPresenter statisticsPresenter;
 
+    private boolean savingToFileWanted = false;
+
     public Simulation(SimulationConfig config) {
         this.config = config;
         this.consoleMapDisplay = new ConsoleMapDisplay();
@@ -28,6 +30,10 @@ public class Simulation {
         this.worldMap.subscribe(consoleMapDisplay);
         initializeGrass();
         initializeAnimals();
+    }
+
+    public void saveToFile() {
+        this.savingToFileWanted = true;
     }
 
     public void setStatistics(Statistics statistics) {
@@ -113,7 +119,10 @@ public class Simulation {
         handleAnimalReproductionAndEating();
         growGrass(worldMap.getGrassToGrowPerStep());
         statistics.update();
-        statistics.appendStatisticsToCsv(step);
+
+        if (savingToFileWanted) {
+            statistics.appendStatisticsToCsv(step);
+        }
 
         worldMap.mapChanged("Zmiana po kroku symulacji");
     }

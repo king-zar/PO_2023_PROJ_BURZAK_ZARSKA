@@ -36,25 +36,19 @@ public class SimulationApp extends Application {
     private int initialWaterAreaSize;
     private int inflowOutflowSize;
 
-    public SimulationApp(Configuration configuration) {
-        this.mapWidth = configuration.width;
-        this.mapHeight = configuration.height;
-        this.simulationSteps = configuration.simulationSteps;
-        this.animalCount = configuration.initialAnimalCount;
-        this.initialAnimalEnergy = configuration.initialAnimalEnergy;
-        this.initialPlantCount = configuration.initialPlantCount;
-        this.plantToGrowPerStep = configuration.plantToGrowPerStep;
-        this.mutationVariant = MutationVariant.valueOf(configuration.mutationVariant);
-        this.minMutations = configuration.minMutations;
-        this.maxMutations = configuration.maxMutations;
-        this.mapVariant = MapVariant.valueOf(configuration.mapVariant);
-        this.maxPlantNutrition =  configuration.maxPlantNutrition;
-        this.genomeLength = configuration.genomeLength;
-        this.energyToReproduce = configuration.energyToReproduce;
-        this.energyLostInReproduction = configuration.energyLostInReproduction;
-        this.waterAreasCount = configuration.waterAreasCount;
-        this.initialWaterAreaSize = configuration.initialWaterAreaSize;
-        this.inflowOutflowSize = configuration.inflowOutflowSize;
+    private boolean savingToFileWanted;
+
+    public SimulationApp(Configuration configuration, boolean savingToFileWanted) {
+        this.config = new SimulationConfig(configuration.width, configuration.height,
+                configuration.simulationSteps, configuration.initialAnimalCount,
+                configuration.initialAnimalEnergy, configuration.initialPlantCount,
+                configuration.plantToGrowPerStep, MutationVariant.valueOf(configuration.mutationVariant),
+                configuration.minMutations, configuration.maxMutations, MapVariant.valueOf(configuration.mapVariant),
+                configuration.maxPlantNutrition, configuration.genomeLength, configuration.energyToReproduce,
+                configuration.energyLostInReproduction, configuration.waterAreasCount,
+                configuration.initialWaterAreaSize, configuration.inflowOutflowSize);
+
+        this.savingToFileWanted = savingToFileWanted;
     }
 
     @Override
@@ -73,11 +67,6 @@ public class SimulationApp extends Application {
             viewRoot.setRight(statisticsView);
 
             new Thread(() -> {
-                SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, animalCount,
-                        initialAnimalEnergy, initialPlantCount, plantToGrowPerStep, mutationVariant, minMutations,
-                        maxMutations, mapVariant, maxPlantNutrition, genomeLength, energyToReproduce, energyLostInReproduction,
-                        waterAreasCount, initialWaterAreaSize, inflowOutflowSize);
-
                 SimulationPresenter presenter = loader.getController();
                 StatisticsPresenter statisticsPresenter = loaderStatistics.getController();
 
@@ -88,10 +77,13 @@ public class SimulationApp extends Application {
                 Statistics statistics = new Statistics(worldMap);
                 statistics.update();
 
-                try {
-                    statistics.initializeCsv();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                if (savingToFileWanted) { // zapisuje statystyki symulacji do pliku tylko, jesli uzytkownik tego chce
+                    try {
+                        simulation.saveToFile();
+                        statistics.initializeCsv();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 statisticsPresenter.initialize(statistics);
