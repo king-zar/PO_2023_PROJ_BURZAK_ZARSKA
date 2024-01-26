@@ -15,6 +15,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SimulationApp extends Application {
+    private SimulationConfig config;
+
     private int mapWidth;
     private int mapHeight;
     private int simulationSteps;
@@ -34,7 +36,7 @@ public class SimulationApp extends Application {
     private int initialWaterAreaSize;
     private int inflowOutflowSize;
 
-    public SimulationApp(Configuration configuration){
+    public SimulationApp(Configuration configuration) {
         this.mapWidth = configuration.width;
         this.mapHeight = configuration.height;
         this.simulationSteps = configuration.simulationSteps;
@@ -70,15 +72,14 @@ public class SimulationApp extends Application {
 
             viewRoot.setRight(statisticsView);
 
-
             new Thread(() -> {
-                SimulationPresenter presenter = loader.getController();
-                StatisticsPresenter statisticsPresenter = loaderStatistics.getController();
-
                 SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, animalCount,
                         initialAnimalEnergy, initialPlantCount, plantToGrowPerStep, mutationVariant, minMutations,
                         maxMutations, mapVariant, maxPlantNutrition, genomeLength, energyToReproduce, energyLostInReproduction,
                         waterAreasCount, initialWaterAreaSize, inflowOutflowSize);
+
+                SimulationPresenter presenter = loader.getController();
+                StatisticsPresenter statisticsPresenter = loaderStatistics.getController();
 
                 Simulation simulation = new Simulation(config);
                 TidesOutflowsMap worldMap = simulation.getWorldMap();
@@ -89,7 +90,7 @@ public class SimulationApp extends Application {
                 statisticsPresenter.initialize(statistics);
                 simulation.setStatistics(statistics);
 
-                for (int i = 0; i < simulationSteps; i++) {
+                for (int i = 0; i < config.simulationSteps(); i++) {
                     if (presenter.isSimulationRunning()) {
                         if (simulation.anyAlive()) {
                             simulation.simulateTimeStep();

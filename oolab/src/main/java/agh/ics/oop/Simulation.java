@@ -1,6 +1,6 @@
-package agh.ics.oop.model;
+package agh.ics.oop;
 
-import agh.ics.oop.presenter.SimulationPresenter;
+import agh.ics.oop.model.*;
 
 import java.util.ArrayList;
 import java.util.Random;

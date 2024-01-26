@@ -1,4 +1,4 @@
-package agh.ics.oop.model;
+package agh.ics.oop;
 
 import agh.ics.oop.model.variants.MapVariant;
 import agh.ics.oop.model.variants.MutationVariant;

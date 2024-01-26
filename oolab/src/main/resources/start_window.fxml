@@ -98,10 +98,13 @@
         <StackPane alignment="BOTTOM_CENTER">
          <VBox alignment="BOTTOM_CENTER" prefHeight="1.0" prefWidth="700.0">
             <children>
+                <HBox alignment="CENTER">
                   <Button onAction="#startSimulation" text="Start" />
+                    <Button onAction="#stopSimulations" text="Stop All" />
+                </HBox>
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                   <children>
-                        <Button onAction="#loadConfiguration" text="Load configuration" />
+                      <Button onAction="#loadConfiguration" text="Load configuration" />
                      <Button layoutX="252.0" layoutY="83.0" onAction="#saveConfiguration" text="Save configuration" />
                   </children>
                </HBox>

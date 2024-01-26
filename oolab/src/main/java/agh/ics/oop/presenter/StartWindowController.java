@@ -1,10 +1,9 @@
 package agh.ics.oop.presenter;
-import agh.ics.oop.model.Configuration;
+import agh.ics.oop.Configuration;
+import agh.ics.oop.SimulationEngine;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import agh.ics.oop.SimulationApp;
-import agh.ics.oop.model.variants.MapVariant;
-import agh.ics.oop.model.variants.MutationVariant;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +17,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StartWindowController {
 
@@ -80,6 +81,8 @@ public class StartWindowController {
 
     private Stage primaryStage;
 
+    private SimulationEngine engine;
+
     @FXML
     private void initialize() {
         mutationVariantChoiceBox.setItems(FXCollections.observableArrayList("RANDOM", "SLIGHT_CORRECTION"));
@@ -113,7 +116,19 @@ public class StartWindowController {
         System.out.println("Start Simulation clicked!");
         Configuration configuration = getConfiguration();
         SimulationApp simulationApp = new SimulationApp(configuration);
-        simulationApp.start(new Stage());
+
+        List<SimulationApp> simulations = new ArrayList<>();
+        simulations.add(simulationApp);
+
+        engine = new SimulationEngine(simulations);
+        engine.runAsync();
+    }
+
+    @FXML
+    public void stopSimulations(ActionEvent event) {
+        if (engine != null) {
+            engine.awaitSimulationsEnd();
+        }
     }
 
     public void setStage(Stage primaryStage) {
