@@ -7,6 +7,7 @@ import agh.ics.oop.SimulationApp;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -113,13 +114,17 @@ public class StartWindowController {
 
     @FXML
     public void startSimulation(ActionEvent event) {
-        System.out.println("Start Simulation clicked!");
-        Configuration configuration = getConfiguration();
-        SimulationApp simulationApp = new SimulationApp(configuration);
+        try {
+            System.out.println("Start Simulation clicked!");
+            Configuration configuration = getConfiguration();
+            SimulationApp simulationApp = new SimulationApp(configuration);
 
-        engine.addSimulation(simulationApp);
+            engine.addSimulation(simulationApp);
 
-        engine.runAsyncInThreadPool();
+            engine.runAsyncInThreadPool();
+        } catch (NumberFormatException e) {
+            displayErrorDialog("Invalid parameter", "Please enter valid numeric parameters.");
+        }
     }
     public void setStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -182,7 +187,6 @@ public class StartWindowController {
     @FXML
     public void loadConfiguration(ActionEvent ev) {
         System.out.println("Loading config...");
-        // Load config from JSON File, let user pick location
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Load configuration");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON", "*.json"));
@@ -197,7 +201,6 @@ public class StartWindowController {
             Gson gson = new Gson();
             Configuration config = gson.fromJson(reader, Configuration.class);
 
-            // set fields
             widthField.setText(String.valueOf(config.width));
             heightField.setText(String.valueOf(config.height));
             stepsField.setText(String.valueOf(config.simulationSteps));
@@ -219,5 +222,13 @@ public class StartWindowController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void displayErrorDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText("Parsing arguments error");
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
