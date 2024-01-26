@@ -41,7 +41,7 @@ public class Statistics {
         registerAnimalDeath();
         updateAverageChildren();
     }
-
+//test
     public void initializeCsv() throws IOException {
         String statisticsDirectory = "Statistics";
         Path projectPath = Paths.get(System.getProperty("user.dir"));
