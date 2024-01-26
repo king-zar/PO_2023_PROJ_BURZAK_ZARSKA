@@ -30,7 +30,7 @@ public class Animal implements WorldElement {
     }
 
     // dla zwierzat dzieci ponizszy konstruktor dziala zawsze
-    private Animal(Vector2d position, int energyLevel, int genesNumber, List<Integer> genes) {
+    Animal(Vector2d position, int energyLevel, int genesNumber, List<Integer> genes) {
         this.position = position;
         this.orientation = MapDirection.NORTH;
         this.energyLevel = energyLevel;

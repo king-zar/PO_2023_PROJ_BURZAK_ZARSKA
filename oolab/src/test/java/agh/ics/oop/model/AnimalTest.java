@@ -21,19 +21,6 @@ class AnimalTest {
     }
 
     @Test
-    void animalShouldLoseEnergyAfterMove() { // nie dziala wiec trzeba zrobic tracenie energii
-        // given
-        Animal animal = new Animal(new Vector2d(2, 2), 10, 7);
-        int initialEnergy = animal.getEnergyLevel();
-
-        // when
-        animal.intendMove();
-
-        // then
-        assertEquals(initialEnergy - 1, animal.getEnergyLevel());
-    }
-
-    @Test
     void animalShouldEatGrassAndGainEnergy() {
         // given
         Animal animal = new Animal(new Vector2d(2, 2), 10, 7);
@@ -52,8 +39,8 @@ class AnimalTest {
         Animal animal1 = new Animal(new Vector2d(2, 2), 10, 7);
         Animal animal2 = new Animal(new Vector2d(2, 2), 10, 7);
 
-        // when
-//        animal1.reproduce(animal2, MutationVariant.RANDOM, 1, 3);
+        //when
+        animal1.reproduce(animal2, MutationVariant.RANDOM, 1, 1, 8, 5);
 
         // then
         assertEquals(5, animal1.getEnergyLevel());

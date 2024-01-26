@@ -4,6 +4,8 @@ import agh.ics.oop.model.variants.MutationVariant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,17 +24,20 @@ class StatisticsTest {
     @Test
     void mostCommonGenotypeShouldBeIdentifiedCorrectly() {
         // given
-        Animal animal1 = new Animal(new Vector2d(1, 1), 10, 7);
+        List<Integer> mostCommonGenotype = new ArrayList<>(Arrays.asList(4, 2, 2, 4, 1, 5, 1));
+
+        Animal animal1 = new Animal(new Vector2d(1, 1), 10, 7, mostCommonGenotype);
         Animal animal2 = new Animal(new Vector2d(1, 2), 10, 7);
+        Animal animal3 = new Animal(new Vector2d(3, 3), 10, 7, mostCommonGenotype);
         worldMap.addAnimal(animal1.getPosition(), animal1);
         worldMap.addAnimal(animal2.getPosition(), animal2);
+        worldMap.addAnimal(animal3.getPosition(), animal3);
 
         // when
         statistics.update();
 
         // then
-        List<Integer> expectedGenotype = animal1.getGenes();
-        assertEquals(expectedGenotype, statistics.getMostCommonGenotype());
+        assertEquals(mostCommonGenotype, statistics.getMostCommonGenotype());
     }
 
     @Test

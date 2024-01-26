@@ -1,6 +1,7 @@
 package agh.ics.oop.presenter;
 import agh.ics.oop.Configuration;
 import agh.ics.oop.SimulationEngine;
+import agh.ics.oop.model.variants.MapVariant;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import agh.ics.oop.SimulationApp;
@@ -88,6 +89,15 @@ public class StartWindowController {
 
     private SimulationEngine engine = new SimulationEngine();
 
+    // moglyby byc inne, tak zostalo przyjete, zeby symulacja byla sensowna
+    private static final int MIN_MAP_DIMENSION = 5; // dla mniejszych map sredni sens ma symulacja
+    private static final int MAX_MAP_DIMENSION = 20; // bo inaczej slabo widac
+    private static final int MAX_STEPS = 200;
+    private static final int MAX_NUTRITION = 5;
+    private static final int MAX_MUTATIONS = 5;
+    private static final int MAX_GENOME_LENGTH = 10;
+    private static final int MAX_WATER_AREAS = 5;
+
     @FXML
     private void initialize() {
         mutationVariantChoiceBox.setItems(FXCollections.observableArrayList("RANDOM", "SLIGHT_CORRECTION"));
@@ -123,6 +133,11 @@ public class StartWindowController {
     public void startSimulation(ActionEvent event) {
         try {
             System.out.println("Start Simulation clicked!");
+
+            if (!validateParameters()) {
+                return;
+            }
+
             Configuration configuration = getConfiguration();
             SimulationApp simulationApp = new SimulationApp(configuration, getFlagForFileSaving());
 
@@ -236,6 +251,86 @@ public class StartWindowController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean validateParameters() {
+        String mapVariant = mapVariantChoiceBox.getValue();
+
+        if (!isValidMapVariant(mapVariant)) {
+            displayErrorDialog("Invalid parameter", "Please select a value for Mutation Variant.");
+            return false;
+        }
+
+        String[] fieldNames = {
+                "Map Width",
+                "Map Height",
+                "Simulation Steps",
+                "Initial Plant Count",
+                "Plants To Grow Per Step",
+                "Initial Animal Count",
+                "Initial Animal Energy",
+                "Max Plant Nutrition",
+                "Energy To Reproduce",
+                "Min Mutations",
+                "Max Mutations",
+                "Genome Length",
+                "Water Areas Count",
+                "Initial Water Area Size",
+                "Inflow/Outflow Size",
+                "Energy Lost In Reproduction"
+        };
+
+        int width = Integer.parseInt(widthField.getText());
+        int height = Integer.parseInt(heightField.getText());
+        int mapPlaces = width * height;
+        int initialEnergy = Integer.parseInt(initialAnimalEnergy.getText());
+
+        int[] valuesToValidate = {
+                width,
+                height,
+                Integer.parseInt(stepsField.getText()),
+                Integer.parseInt(initialPlantCount.getText()),
+                Integer.parseInt(plantToGrowPerStep.getText()),
+                Integer.parseInt(animalCount.getText()),
+                initialEnergy,
+                Integer.parseInt(maxPlantNutrition.getText()),
+                Integer.parseInt(energyToReproduce.getText()),
+                Integer.parseInt(minMutations.getText()),
+                Integer.parseInt(maxMutations.getText()),
+                Integer.parseInt(genomeLength.getText()),
+                Integer.parseInt(waterAreasCount.getText()),
+                Integer.parseInt(initialWaterAreaSize.getText()),
+                Integer.parseInt(inflowOutflowSize.getText()),
+                Integer.parseInt(energyLostInReproduction.getText())
+        };
+
+        int[] minValues = {MIN_MAP_DIMENSION, MIN_MAP_DIMENSION, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1};
+        int[] maxValues = {MAX_MAP_DIMENSION, MAX_MAP_DIMENSION, MAX_STEPS, mapPlaces, mapPlaces/10,
+                mapPlaces, mapPlaces/4, MAX_NUTRITION, initialEnergy, MAX_MUTATIONS,
+                MAX_MUTATIONS, MAX_GENOME_LENGTH, MAX_WATER_AREAS, mapPlaces/20, mapPlaces/20,
+                initialEnergy/2};
+
+        for (int i = 0; i < valuesToValidate.length; i++) {
+            if (valuesToValidate[i] < minValues[i] || valuesToValidate[i] > maxValues[i]) {
+                displayErrorDialog("Invalid parameter", "Please enter a valid value for " + fieldNames[i] +
+                        " (should be between " + minValues[i] + " and " + maxValues[i] + ").");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isValidMapVariant(String mapVariant) {
+        if (mapVariant == null || mapVariant.isEmpty()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
     }
 
     private void displayErrorDialog(String title, String content) {
