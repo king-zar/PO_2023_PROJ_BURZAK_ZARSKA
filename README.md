@@ -13,12 +13,12 @@
 - [x] wariant przypływy i odpływy
 - [x] dodać implementację odpływów
 - [x] poprawić warunki brzegowe dla odpływów związane z zawijaniem mapy na x
-- [ ] wielowątkowość
+- [x] wielowątkowość
 - [x] statystyki
 - [x] skalowanie mapy do rozmiaru okienka
 - [x] dodanie większej ilości konfiguracji dla użytkownika
-- [ ] testy jednostkowe
-- [ ] obsługa błędów
+- [x] testy jednostkowe
+- [x] obsługa błędów
 - [x] dodanie losowego kierunku dla zwierzaka nowo narodzonego i rozpoczecie odczytywania genotypu w losowym miejscu
 - [x] dodanie kolejności rozwiązywania konfliktów
 - [x] zatrzymanie pojawiania się roślinek jak nie ma już na nie miejsca na mapie

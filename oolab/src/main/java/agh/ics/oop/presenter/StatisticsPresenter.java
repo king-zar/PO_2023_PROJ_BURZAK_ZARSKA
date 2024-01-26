@@ -2,8 +2,10 @@ package agh.ics.oop.presenter;
 
 import agh.ics.oop.model.Statistics;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -96,8 +98,19 @@ public class StatisticsPresenter {
                     statistics.getAverageLifeSpan() + "," +
                     statistics.getAverageChildren() + "\n");
         } catch (IOException e) {
-            e.printStackTrace();
+            displayErrorDialog("Error Saving Statistics", "An error occurred while saving statistics to the file.");
         }
     }
 
+    private void displayErrorDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText("Error");
+        alert.setContentText(content);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/myszojelen.jpg")));
+
+        alert.showAndWait();
+    }
 }

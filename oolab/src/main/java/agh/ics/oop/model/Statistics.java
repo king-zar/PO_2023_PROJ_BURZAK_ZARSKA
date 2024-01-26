@@ -1,5 +1,9 @@
 package agh.ics.oop.model;
 
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -65,7 +69,7 @@ public class Statistics {
         try (PrintWriter writer = new PrintWriter(new FileWriter(csvPath.toFile(), true))) {
             writer.println("Step,Total Animals,Total Plants,Total Waters,Free Fields,Most Common Genotype,Average Energy,Average LifeSpan,Average Children");
         } catch (IOException e) {
-            e.printStackTrace();
+            displayErrorDialog("Error Saving Statistics", "An error occurred while saving statistics to the file.");
         }
     }
 
@@ -88,7 +92,7 @@ public class Statistics {
 
             writer.println(dataRow);
         } catch (IOException e) {
-            e.printStackTrace();
+            displayErrorDialog("Error Appending Statistics", "An error occurred while saving statistics to the file.");
         }
     }
 
@@ -180,6 +184,18 @@ public class Statistics {
     public double getAverageEnergy() { return averageEnergy; }
     public double getAverageLifeSpan() { return averageLifeSpan; }
     public double getAverageChildren() { return averageChildren; }
+
+    private void displayErrorDialog(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText("Error");
+        alert.setContentText(content);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/myszojelen.jpg")));
+
+        alert.showAndWait();
+    }
 }
 
 
