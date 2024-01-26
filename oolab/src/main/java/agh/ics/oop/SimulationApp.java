@@ -90,11 +90,16 @@ public class SimulationApp extends Application {
                 simulation.setStatistics(statistics);
 
                 for (int i = 0; i < simulationSteps; i++) {
-                    if (presenter.isSimulationRunning() && simulation.anyAlive()) {
-                        simulation.simulateTimeStep();
-                        presenter.mapChanged(worldMap, "Zmiana po kroku symulacji");
-                        statisticsPresenter.updateStatisticsDisplay();
+                    if (presenter.isSimulationRunning()) {
+                        if (simulation.anyAlive()) {
+                            simulation.simulateTimeStep();
+                            presenter.mapChanged(worldMap, "Zmiana po kroku symulacji");
+                            statisticsPresenter.updateStatisticsDisplay();
+                        } else { // jesli wszystkie umra, konczymy symulacje
+                            break;
+                        }
                     }
+
                     try {
                         Thread.sleep(500); // Dostosuj czas opóźnienia, jeśli potrzebujesz
                     } catch (InterruptedException e) {
