@@ -87,13 +87,20 @@ public class SimulationApp extends Application {
                 presenter.setConfig(config);
                 Statistics statistics = new Statistics(worldMap);
                 statistics.update();
+
+                try {
+                    statistics.initializeCsv();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
                 statisticsPresenter.initialize(statistics);
                 simulation.setStatistics(statistics);
 
                 for (int i = 0; i < config.simulationSteps(); i++) {
                     if (presenter.isSimulationRunning()) {
                         if (simulation.anyAlive()) {
-                            simulation.simulateTimeStep();
+                            simulation.simulateTimeStep(i);
                             presenter.mapChanged(worldMap, "Zmiana po kroku symulacji");
                             statisticsPresenter.updateStatisticsDisplay();
                         } else { // jesli wszystkie umra, konczymy symulacje
