@@ -94,7 +94,7 @@ public class TidesOutflowsMap extends WorldMap {
         for (int i = 0; i <= currentWaterAreaId; i++) {
             List<Vector2d> waterAreaPositions = getWaterPositionsByAreaId(i);
 
-            waterAreaPositions.sort(Comparator.comparingInt(v -> v.getX() + v.getY()));
+            waterAreaPositions.sort(Comparator.comparing(Vector2d::getX).thenComparing(Vector2d::getY));
 
             if (!waterAreaPositions.isEmpty()) {
                 for (int a = 0; a < waterAmount && !waterAreaPositions.isEmpty(); a++) {
@@ -160,19 +160,23 @@ public class TidesOutflowsMap extends WorldMap {
     private List<Vector2d> getFreePositionsAround(Vector2d centerPosition) {
         List<Vector2d> freePositions = new ArrayList<>();
 
-        // Sprawdź otoczenie w promieniu 1 od pozycji centerPosition
-        for (int xOffset = -1; xOffset <= 1; xOffset++) {
-            for (int yOffset = -1; yOffset <= 1; yOffset++) {
-                if (xOffset == 0 && yOffset == 0) {
-                    continue; // Pomijamy samą pozycję centerPosition
-                }
+        int[][] directions = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
 
-                Vector2d newPosition = wrapPosition(centerPosition.add(new Vector2d(xOffset, yOffset)));
+        for (int[] direction : directions) {
+            int xOffset = direction[0];
+            int yOffset = direction[1];
 
-                // Sprawdź, czy nowa pozycja jest wolna
-                if (isOutsideWaterArea(newPosition) && isPositionWithinBounds(newPosition)) {
-                    freePositions.add(newPosition);
-                }
+            Vector2d newPosition = wrapPosition(centerPosition.add(new Vector2d(xOffset, yOffset)));
+
+            // brak zawijania na x na brzegach
+            if (centerPosition.getX() == 0 && newPosition.getX() == this.getMapWidth()-1
+                    || centerPosition.getX() == this.getMapWidth()-1 && newPosition.getX() == 0) {
+                continue;
+            }
+
+            // Sprawdź, czy nowa pozycja jest wolna
+            if (isOutsideWaterArea(newPosition) && isPositionWithinBounds(newPosition)) {
+                freePositions.add(newPosition);
             }
         }
 

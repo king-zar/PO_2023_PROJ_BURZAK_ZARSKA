@@ -1,6 +1,9 @@
 package agh.ics.oop;
 
 import agh.ics.oop.model.*;
+import agh.ics.oop.presenter.SimulationPresenter;
+import agh.ics.oop.presenter.StatisticsPresenter;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,6 +18,8 @@ public class Simulation {
     private static final double GROWTH_RATIO_AT_PREFERRED_AREA = 0.8;
 
     private ConsoleMapDisplay consoleMapDisplay;
+    private SimulationPresenter presenter;
+    private StatisticsPresenter statisticsPresenter;
 
     public Simulation(SimulationConfig config) {
         this.config = config;
@@ -27,6 +32,14 @@ public class Simulation {
 
     public void setStatistics(Statistics statistics) {
         this.statistics = statistics;
+    }
+
+    public void setSimulationPresenter(SimulationPresenter presenter) {
+        this.presenter = presenter;
+    }
+
+    public void setStatisticsPresenter(StatisticsPresenter statPresenter) {
+        this.statisticsPresenter = statPresenter;
     }
 
     private TidesOutflowsMap initializeMap() {

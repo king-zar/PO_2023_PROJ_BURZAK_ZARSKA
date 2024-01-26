@@ -41,12 +41,8 @@ public class StatisticsPresenter {
     private Statistics statistics;
 
     public void initialize(Statistics stats) {
-        setStatistics(stats);
-        updateStatisticsDisplay();
-    }
-
-    private void setStatistics(Statistics stats) {
         this.statistics = stats;
+        updateStatisticsDisplay();
     }
 
     public void updateStatisticsDisplay() {
