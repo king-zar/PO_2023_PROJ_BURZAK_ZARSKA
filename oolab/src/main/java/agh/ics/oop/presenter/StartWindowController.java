@@ -121,14 +121,6 @@ public class StartWindowController {
 
         engine.runAsyncInThreadPool();
     }
-
-    @FXML
-    public void stopSimulations(ActionEvent event) {
-        if (engine != null) {
-            engine.awaitSimulationsEnd();
-        }
-    }
-
     public void setStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }

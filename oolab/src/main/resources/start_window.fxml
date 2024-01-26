@@ -100,7 +100,6 @@
             <children>
                 <HBox alignment="CENTER">
                   <Button onAction="#startSimulation" text="Start" />
-                    <Button onAction="#stopSimulations" text="Stop All" />
                 </HBox>
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                   <children>
