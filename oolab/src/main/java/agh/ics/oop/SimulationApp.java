@@ -8,6 +8,7 @@ import agh.ics.oop.presenter.StatisticsPresenter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -108,6 +109,7 @@ public class SimulationApp extends Application {
                 }
             }).start();
 
+            primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/myszojelen.jpg")));
 
             primaryStage.show();
         } catch (IOException e) {

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -46,6 +47,7 @@ public class StartWindow extends Application {
             });
 
             Scene scene = new Scene(root, root.getMinWidth(), root.getMinHeight());
+            primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/myszojelen.jpg")));
             primaryStage.setScene(scene);
             primaryStage.show();
 

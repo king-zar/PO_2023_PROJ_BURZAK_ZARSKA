@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -242,6 +243,10 @@ public class StartWindowController {
         alert.setTitle(title);
         alert.setHeaderText("Parsing arguments error");
         alert.setContentText(content);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/myszojelen.jpg")));
+
         alert.showAndWait();
     }
 }
