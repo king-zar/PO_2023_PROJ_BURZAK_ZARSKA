@@ -9,7 +9,7 @@ import java.util.List;
 public class Simulation {
     private TidesOutflowsMap worldMap;
     private SimulationConfig config;
-    private SimulationPresenter presenter;
+    private Statistics statistics;
 
     private static final double PREFERRED_AREA_RATIO = 0.2;
     private static final double GROWTH_RATIO_AT_PREFERRED_AREA = 0.8;
@@ -25,8 +25,8 @@ public class Simulation {
         initializeAnimals();
     }
 
-    public void setPresenter(SimulationPresenter presenter) {
-        this.presenter = presenter;
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
     }
 
     private TidesOutflowsMap initializeMap() {
@@ -99,8 +99,7 @@ public class Simulation {
         moveAnimals();
         handleAnimalReproductionAndEating();
         growGrass(worldMap.getGrassToGrowPerStep());
-
-        Statistics.getInstance().update(worldMap);
+        statistics.update();
 
         worldMap.mapChanged("Zmiana po kroku symulacji");
     }

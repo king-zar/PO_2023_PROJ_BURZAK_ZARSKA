@@ -3,15 +3,13 @@ package agh.ics.oop.model;
 import java.util.*;
 
 public class Statistics {
-    private static Statistics instance = new Statistics(); //singleton
-    private Statistics() {}
-    public static Statistics getInstance() {
-        return instance;
-    }
+    private TidesOutflowsMap worldMap;
+
     private int totalAnimals;
     private int totalPlants;
+    private int totalWaters;
     private int freeFields;
-    private final Map<List<Integer>, Integer> genotypePopularity  = new HashMap<>(); // jak biale kruki 16.11
+    private Map<List<Integer>, Integer> genotypePopularity = new HashMap<>();
     private double averageEnergy;
     private double averageLifeSpan;
     private double averageChildren;
@@ -20,46 +18,78 @@ public class Statistics {
     private int deadAnimalsCount;
     private int totalChildrenCount;
 
+    private int uniquePositions;
 
-    public void update(WorldMap worldMap) {
-        updateTotalAnimals(worldMap.getAllAnimals());
-        updateTotalPlants(worldMap.getGrassCount());
-        updateFreeFields(worldMap.getMapWidth(), worldMap.getMapHeight(), totalAnimals);
-        updateGenotypePopularity(worldMap.getAllAnimals());
-        updateAverageEnergy(worldMap.getAllAnimals());
-        updateAverageLifeSpan();
-        updateAverageChildren(worldMap.getAllAnimals());
+    public Statistics(TidesOutflowsMap worldMap) {
+        this.worldMap = worldMap;
     }
 
-    private void updateTotalAnimals(List<Animal> animals) {
-        totalAnimals = animals.size();
+    public void update() {
+        setUniquePositions();
+        setFreeFields();
+        updateGenotypePopularity();
+        updateAverageEnergy();
+        registerAnimalDeath();
+        updateAverageChildren();
     }
 
-    private void updateTotalPlants(int grassCount) {
+    private void setUniquePositions() {
+        Set<Vector2d> uniquePositionsSet = new HashSet<>();
+
+        List<Animal> animals = worldMap.getAllAnimals();
+        List<Grass> grasses = worldMap.getAllGrass();
+        List<Water> waters = worldMap.getAllWaters();
+
+        List<WorldElement> allElements = new ArrayList<>();
+        allElements.addAll(animals);
+        allElements.addAll(grasses);
+        allElements.addAll(waters);
+
+        setTotalAnimals(animals.size());
+        setTotalPlants(grasses.size());
+        setTotalWaters(waters.size());
+
+        for (WorldElement element : allElements) {
+            uniquePositionsSet.add(element.getPosition());
+        }
+
+        uniquePositions = uniquePositionsSet.size();
+    }
+
+    private void setTotalAnimals(int animalsCount) {
+        totalAnimals = animalsCount;
+    }
+
+    private void setTotalPlants(int grassCount) {
         totalPlants = grassCount;
     }
 
-    private void updateFreeFields(int width, int height, int totalAnimals) {
-        freeFields = (width * height) - totalAnimals - totalPlants;
+    private void setTotalWaters(int waterCount) {totalWaters = waterCount;};
+
+    private void setFreeFields() {
+        freeFields = (worldMap.getMapWidth() * worldMap.getMapHeight()) - uniquePositions;
     }
 
-    private void updateGenotypePopularity(List<Animal> animals) {
+    private void updateGenotypePopularity() {
         genotypePopularity.clear();
-        for (Animal animal : animals) {
+        for (Animal animal : worldMap.getAllAnimals()) {
             List<Integer> genotype = animal.getGenes();
             genotypePopularity.put(genotype, genotypePopularity.getOrDefault(genotype, 0) + 1);
         }
     }
 
-    private void updateAverageEnergy(List<Animal> animals) {
+    private void updateAverageEnergy() {
         if (totalAnimals > 0) {
-            averageEnergy = animals.stream().mapToInt(Animal::getEnergyLevel).average().orElse(0);
+            averageEnergy = worldMap.getAllAnimals().stream().mapToInt(Animal::getEnergyLevel).average().orElse(0);
         }
     }
 
-    public void registerAnimalDeath(Animal animal) {
-        deadAnimalsLifetimeSum += animal.getAge();
-        deadAnimalsCount++;
+    public void registerAnimalDeath() {
+        for (Animal deadAnimal:worldMap.getDeadAnimals()) {
+            deadAnimalsLifetimeSum += deadAnimal.getAge();
+            deadAnimalsCount++;
+        }
+
         updateAverageLifeSpan();
     }
 
@@ -69,8 +99,8 @@ public class Statistics {
         }
     }
 
-    private void updateAverageChildren(List<Animal> animals) {
-        totalChildrenCount += animals.stream().mapToInt(Animal::getChildsNumber).sum();
+    private void updateAverageChildren() {
+        totalChildrenCount = worldMap.getAllAnimals().stream().mapToInt(Animal::getChildsNumber).sum(); // usunelam + bo dla aktualnej sytuacji
         if (totalAnimals > 0) {
             averageChildren = (double) totalChildrenCount / totalAnimals;
         }
@@ -84,6 +114,8 @@ public class Statistics {
     }
     public int getTotalAnimals() { return totalAnimals; }
     public int getTotalPlants() { return totalPlants; }
+
+    public int getTotalWaters() { return totalWaters; }
     public int getFreeFields() { return freeFields; }
     public Map<List<Integer>, Integer> getGenotypePopularity() { return genotypePopularity; }
     public double getAverageEnergy() { return averageEnergy; }

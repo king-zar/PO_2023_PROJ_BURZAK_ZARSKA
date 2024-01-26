@@ -205,6 +205,10 @@ public class TidesOutflowsMap extends WorldMap {
         return waterAreas.get(position);
     }
 
+    public List<Water> getAllWaters() {
+        return new ArrayList<>(waterAreas.values());
+    }
+
     public boolean getTideTime() {
         return tideTime;
     }

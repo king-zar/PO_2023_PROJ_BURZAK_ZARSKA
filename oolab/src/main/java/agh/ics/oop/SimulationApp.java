@@ -68,20 +68,15 @@ public class SimulationApp extends Application {
             loaderStatistics.setLocation(getClass().getClassLoader().getResource("StatisticsView.fxml"));
             VBox statisticsView = loaderStatistics.load(); // Załaduj widok statystyk
 
-            StatisticsPresenter statisticsPresenter = loaderStatistics.getController();
-            if (statisticsPresenter == null) {
-                throw new IllegalStateException("StatisticsPresenter is null!");
-            }
-
-            statisticsPresenter.initialize();
-
             viewRoot.setRight(statisticsView);
 
 
             new Thread(() -> {
                 SimulationPresenter presenter = loader.getController();
+                StatisticsPresenter statisticsPresenter = loaderStatistics.getController();
+
                 SimulationConfig config = new SimulationConfig(mapWidth, mapHeight, simulationSteps, animalCount,
-                        initialAnimalEnergy, initialPlantCount, plantToGrowPerStep, mutationVariant,  minMutations,
+                        initialAnimalEnergy, initialPlantCount, plantToGrowPerStep, mutationVariant, minMutations,
                         maxMutations, mapVariant, maxPlantNutrition, genomeLength, energyToReproduce, energyLostInReproduction,
                         waterAreasCount, initialWaterAreaSize, inflowOutflowSize);
 
@@ -89,14 +84,16 @@ public class SimulationApp extends Application {
                 TidesOutflowsMap worldMap = simulation.getWorldMap();
                 presenter.setWorldMap(worldMap);
                 presenter.setConfig(config);
+                Statistics statistics = new Statistics(worldMap);
+                statistics.update();
+                statisticsPresenter.initialize(statistics);
+                simulation.setStatistics(statistics);
 
-                //StatisticsPresenter statisticsPresenter = loaderStatistics.getController();
-
-                for (int i=0; i<simulationSteps; i++) {
+                for (int i = 0; i < simulationSteps; i++) {
                     if (presenter.isSimulationRunning() && simulation.anyAlive()) {
                         simulation.simulateTimeStep();
                         presenter.mapChanged(worldMap, "Zmiana po kroku symulacji");
-                        statisticsPresenter.initialize();
+                        statisticsPresenter.updateStatisticsDisplay();
                     }
                     try {
                         Thread.sleep(500); // Dostosuj czas opóźnienia, jeśli potrzebujesz
@@ -105,6 +102,7 @@ public class SimulationApp extends Application {
                     }
                 }
             }).start();
+
 
             primaryStage.show();
         } catch (IOException e) {

@@ -16,6 +16,7 @@
     <Label text="Statistics:" style="-fx-font-weight: bold;" />
     <Label fx:id="totalAnimalsLabel" text="Total Animals: 0" />
     <Label fx:id="totalPlantsLabel" text="Total Plants: 0" />
+    <Label fx:id="totalWatersLabel" text="Total Waters: 0" />
     <Label fx:id="freeFieldsLabel" text="Free Fields: 0" />
     <Label fx:id="mostCommonGenotypeLabel" text="Most Common Genotype: N/A" />
     <Label fx:id="averageEnergyLabel" text="Average Energy: 0" />

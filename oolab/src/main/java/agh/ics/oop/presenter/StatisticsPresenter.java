@@ -21,6 +21,8 @@ public class StatisticsPresenter {
     @FXML
     private Label totalAnimalsLabel;
     @FXML
+    private Label totalWatersLabel;
+    @FXML
     private Label totalPlantsLabel;
     @FXML
     private Label freeFieldsLabel;
@@ -38,15 +40,20 @@ public class StatisticsPresenter {
 
     private Statistics statistics;
 
-    public void initialize() {
-        statistics = Statistics.getInstance();
-
+    public void initialize(Statistics stats) {
+        setStatistics(stats);
         updateStatisticsDisplay();
     }
+
+    private void setStatistics(Statistics stats) {
+        this.statistics = stats;
+    }
+
     public void updateStatisticsDisplay() {
         javafx.application.Platform.runLater(() -> {
             totalAnimalsLabel.setText("Total Animals: " + statistics.getTotalAnimals());
             totalPlantsLabel.setText("Total Plants: " + statistics.getTotalPlants());
+            totalWatersLabel.setText("Total Waters: " + statistics.getTotalWaters());
             freeFieldsLabel.setText("Free Fields: " + statistics.getFreeFields());
             mostCommonGenotypeLabel.setText("Most Common Genotype: " + getMostCommonGenotype());
             averageEnergyLabel.setText("Average Energy: " + String.format("%.2f", statistics.getAverageEnergy()));

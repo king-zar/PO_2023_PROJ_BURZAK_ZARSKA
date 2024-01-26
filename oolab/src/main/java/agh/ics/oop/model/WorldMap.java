@@ -17,6 +17,7 @@ public class WorldMap {
     private static Map<Vector2d, Grass> grassMap = new HashMap<>();
 
     private List<MapChangeListener> observers = new ArrayList<>();
+    private List<Animal> deadAnimals = new ArrayList<>();
 
     // default
     public WorldMap() {
@@ -57,12 +58,9 @@ public class WorldMap {
     }
 
     public void removeDeadAnimals() {
-        List<Animal> deadAnimals = new ArrayList<>();
-
         for (Animal animal : animalsMap.values()) {
             if (animal.getEnergyLevel() <= 0) {
                 deadAnimals.add(animal);
-                Statistics.getInstance().registerAnimalDeath(animal);
             }
         }
 
@@ -246,6 +244,14 @@ public class WorldMap {
 
     public List<Animal> getAllAnimals() {
         return new ArrayList<>(animalsMap.values());
+    }
+
+    public List<Grass> getAllGrass() {
+        return new ArrayList<>(grassMap.values());
+    }
+
+    public List<Animal> getDeadAnimals () {
+        return new ArrayList<>(deadAnimals);
     }
 
     public boolean anyAlive() {
