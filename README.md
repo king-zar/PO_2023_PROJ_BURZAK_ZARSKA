@@ -12,9 +12,9 @@
 - [x] podstawowe GUI
 - [x] wariant przypływy i odpływy
 - [x] dodać implementację odpływów
-- [ ] poprawić warunki brzegowe dla odpływów związane z zawijaniem mapy na x
+- [x] poprawić warunki brzegowe dla odpływów związane z zawijaniem mapy na x
 - [ ] wielowątkowość
-- [ ] statystyki
+- [x] statystyki
 - [x] skalowanie mapy do rozmiaru okienka
 - [x] dodanie większej ilości konfiguracji dla użytkownika
 - [ ] testy jednostkowe

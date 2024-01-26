@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane minHeight="500.0" minWidth="700.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.ics.oop.presenter.StartWindowController">
+<BorderPane minHeight="550.0" minWidth="700.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.ics.oop.presenter.StartWindowController">
 
     <top>
         <StackPane alignment="CENTER">
@@ -70,27 +70,6 @@
 
             <Label text="Size of inflow/outflow:" GridPane.columnIndex="5" GridPane.rowIndex="8" />
             <TextField fx:id="inflowOutflowSize" GridPane.columnIndex="6" GridPane.rowIndex="8" />
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-         </rowConstraints>
-
         </GridPane>
     </center>
 
@@ -100,6 +79,11 @@
             <children>
                 <HBox alignment="CENTER">
                   <Button onAction="#startSimulation" text="Start" />
+                </HBox>
+                <HBox/>
+                <HBox alignment="CENTER">
+                <Label text="Do you want to save stats?:" GridPane.rowIndex="8" />
+                <ChoiceBox fx:id="saveStatsChoiceBox" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                 </HBox>
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                   <children>

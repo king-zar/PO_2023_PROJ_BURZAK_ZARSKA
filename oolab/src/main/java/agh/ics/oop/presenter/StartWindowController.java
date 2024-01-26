@@ -80,6 +80,9 @@ public class StartWindowController {
     @FXML
     private BorderPane rootBorderPane; // Zmiana typu na BorderPane
 
+    @FXML
+    private ChoiceBox<String> saveStatsChoiceBox;
+
     private Stage primaryStage;
 
     private SimulationEngine engine = new SimulationEngine();
@@ -90,6 +93,9 @@ public class StartWindowController {
         mutationVariantChoiceBox.setValue("RANDOM"); // domyslnie RANDOM
 
         mapVariantChoiceBox.setItems(FXCollections.observableArrayList("EARTH_LIKE", "TIDES_OUTFLOWS"));
+
+        saveStatsChoiceBox.setItems(FXCollections.observableArrayList("YES", "NO"));
+        saveStatsChoiceBox.setValue("NO"); // domyslnie nie
 
         mapVariantChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             boolean isTidesOutflows = "TIDES_OUTFLOWS".equals(newValue);

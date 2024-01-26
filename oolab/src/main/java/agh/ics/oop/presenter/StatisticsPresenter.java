@@ -69,7 +69,7 @@ public class StatisticsPresenter {
     }
 
     @FXML
-    private void onSaveStatistics() {
+    private void onSaveLastStepStatistics() { // gdy uzytkownik chce zachowac tylko ostatni krok symulacji
         System.out.println("VBox: " + statisticsVBox);
         System.out.println("Scene: " + (statisticsVBox != null ? statisticsVBox.getScene() : "null"));
 

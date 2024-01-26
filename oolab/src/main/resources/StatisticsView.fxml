@@ -22,7 +22,7 @@
     <Label fx:id="averageEnergyLabel" text="Average Energy: 0" />
     <Label fx:id="averageLifeSpanLabel" text="Average Lifespan: 0" />
     <Label fx:id="averageChildrenLabel" text="Average Children: 0" />
-    <Button text="Save statistics" onAction="#onSaveStatistics"/>
+    <Button text="Save Last Step statistics" onAction="#onSaveLastStepStatistics"/>
 </VBox>
 
 
